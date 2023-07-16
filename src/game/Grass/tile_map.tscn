@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://px8uey4vnmw4"]
+
+[ext_resource type="TileSet" uid="uid://d13c4prnl50aa" path="res://src/resources/GrassTileSet.tres" id="2_6tnrv"]
+[ext_resource type="Script" path="res://src/game/Grass/Grass.gd" id="3_d7wp4"]
+
+[node name="Grass" type="TileMap"]
+texture_filter = 1
+position = Vector2(16, 16)
+tile_set = ExtResource("2_6tnrv")
+format = 2
+layer_0/name = "Grass"
+layer_1/name = "Grass_dark"
+layer_1/enabled = true
+layer_1/modulate = Color(1, 1, 1, 1)
+layer_1/y_sort_enabled = false
+layer_1/y_sort_origin = 0
+layer_1/z_index = 0
+layer_1/tile_data = PackedInt32Array()
+script = ExtResource("3_d7wp4")

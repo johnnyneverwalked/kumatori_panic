@@ -1,0 +1,101 @@
+[gd_scene load_steps=13 format=3 uid="uid://ckgk82uemd4bg"]
+
+[ext_resource type="PackedScene" uid="uid://cmj5bxlgfxs6k" path="res://src/game/Chic/chic.tscn" id="1_0u5uk"]
+[ext_resource type="Script" path="res://src/game.gd" id="1_61h8o"]
+[ext_resource type="PackedScene" uid="uid://bnx4kbj5rc2jw" path="res://src/game/Bear/bear.tscn" id="1_s3fbk"]
+[ext_resource type="PackedScene" uid="uid://px8uey4vnmw4" path="res://src/game/Grass/tile_map.tscn" id="4_yo0vf"]
+[ext_resource type="Shader" path="res://src/shaders/outline.gdshader" id="5_b67m4"]
+[ext_resource type="Texture2D" uid="uid://dlk7qgjyuoqcv" path="res://assets/sprites/egg_timer-2.png" id="6_gsvaw"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gqbyl"]
+shader = ExtResource("5_b67m4")
+shader_parameter/outline_color = Color(0.223529, 0.203922, 0.341176, 1)
+shader_parameter/fill_color = Color(1, 1, 1, 1)
+shader_parameter/swap_color = Color(1, 1, 1, 1)
+shader_parameter/width = 1.0
+shader_parameter/shadow_threshold = 80.0
+shader_parameter/pattern = 0
+shader_parameter/inside = false
+shader_parameter/add_margins = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gbqmv"]
+atlas = ExtResource("6_gsvaw")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5fp6e"]
+atlas = ExtResource("6_gsvaw")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ymlqp"]
+atlas = ExtResource("6_gsvaw")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_es1kl"]
+atlas = ExtResource("6_gsvaw")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_8xhne"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gbqmv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5fp6e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ymlqp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_es1kl")
+}],
+"loop": true,
+"name": &"default",
+"speed": 8.0
+}]
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_61h8o")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(4, 4)
+
+[node name="Bear" parent="." instance=ExtResource("1_s3fbk")]
+
+[node name="Nest" type="Node2D" parent="."]
+position = Vector2(40, -8)
+
+[node name="Chic2" parent="Nest" instance=ExtResource("1_0u5uk")]
+position = Vector2(-8, 8)
+
+[node name="Chic" parent="Nest" instance=ExtResource("1_0u5uk")]
+position = Vector2(-40, 40)
+
+[node name="Chic3" parent="Nest" instance=ExtResource("1_0u5uk")]
+position = Vector2(-72, 8)
+
+[node name="Chic4" parent="Nest" instance=ExtResource("1_0u5uk")]
+position = Vector2(-72, -24)
+
+[node name="Chic7" parent="Nest" instance=ExtResource("1_0u5uk")]
+position = Vector2(-40, -24)
+
+[node name="Chic8" parent="Nest" instance=ExtResource("1_0u5uk")]
+position = Vector2(-8, -24)
+
+[node name="Chic5" parent="Nest" instance=ExtResource("1_0u5uk")]
+position = Vector2(-72, 40)
+
+[node name="Chic6" parent="Nest" instance=ExtResource("1_0u5uk")]
+position = Vector2(-8, 40)
+
+[node name="Grass" parent="." instance=ExtResource("4_yo0vf")]
+
+[node name="EggTimer" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+material = SubResource("ShaderMaterial_gqbyl")
+position = Vector2(-152, 72)
+scale = Vector2(1.5, 1.5)
+sprite_frames = SubResource("SpriteFrames_8xhne")
+autoplay = "default"
+frame_progress = 0.704011
