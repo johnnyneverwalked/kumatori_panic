@@ -11,6 +11,8 @@ func _ready():
 	color = color
 	sprite.frame = get_index() * 2
 	sprite.material.set_shader_parameter("outline_color", GameManager.chic_outline_color)
+	sprite.material.set_shader_parameter("blink_interval", randf_range(3.0, 5.0))
+	sprite.material.set_shader_parameter("can_blink", true)
 
 
 func set_chic_color(_color: GameManager.Colors = GameManager.Colors.WHITE):

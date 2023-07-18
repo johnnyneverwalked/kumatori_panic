@@ -6,6 +6,8 @@ uniform vec4 swap_color : source_color = vec4(1.0);
 uniform float width : hint_range(0, 20) = 1.0;
 uniform float shadow_threshold : hint_range(0, 255) = 80.0;
 uniform int pattern : hint_range(0, 2) = 0; // diamond, circle, square
+uniform float blink_interval : hint_range(1, 5) = 1.0;
+uniform bool can_blink = false;
 uniform bool inside = false;
 uniform bool add_margins = true; // only useful when inside is false
 
@@ -56,6 +58,8 @@ void fragment() {
 		}
 	} else {
 		COLOR = texture(TEXTURE, uv);
+		float time_passed = mod(TIME, blink_interval);
+		bool blink = can_blink && (time_passed > blink_interval - .2 || (time_passed < .4 && time_passed > .2));
 		if (fill_color.rgba == COLOR.rgba) {
 			COLOR.rgba = swap_color.rgba;
 		} else if (COLOR.r == COLOR.b && COLOR.b == COLOR.g && COLOR.a == fill_color.a) { // shadows
@@ -64,6 +68,8 @@ void fragment() {
 				COLOR.rgb = swap_color.rgb - offset;
 				COLOR.a = swap_color.a;
 			}
+		} else if (outline_color.rgba == COLOR.rgba && blink) {
+			COLOR = swap_color;
 		}
 	}
 	

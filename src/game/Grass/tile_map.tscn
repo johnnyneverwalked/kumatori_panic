@@ -4,6 +4,7 @@
 [ext_resource type="Script" path="res://src/game/Grass/Grass.gd" id="3_d7wp4"]
 
 [node name="Grass" type="TileMap"]
+visible = false
 texture_filter = 1
 position = Vector2(16, 16)
 tile_set = ExtResource("2_6tnrv")

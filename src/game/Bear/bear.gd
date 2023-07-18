@@ -11,18 +11,26 @@ signal place_chic(chic)
 @onready var hand_L: Sprite2D = $Hands/HandL
 @onready var hand_R: Sprite2D = $Hands/HandR
 @onready var holding: Node2D = $Hands/Holding
-@onready var pd: Area2D = $PickupDetector
+@onready var pickupDetector: Node2D = $PickupDetector
 @onready var lock_timer: Timer = $LockTimer
 @onready var indicator: Sprite2D = $Indicator
 
 const PICKUP_SPEED = .2
 var HAND_POSITIONS: Dictionary = {
+	
+}
+
+var pd: Dictionary = {
+	
 }
 
 var locked: bool
-var hands_position: Vector2 = Vector2.LEFT: set = set_hands_position
+var moving: bool
+var hands_position: Vector2 = Vector2.UP: set = set_hands_position
 
 func _ready():
+	var cardinal_dirs = [Vector2.UP, Vector2.DOWN, Vector2.LEFT, Vector2.RIGHT]
+	
 	# fix shader params for left hand to be seen from the "outslide"
 	hand_L.material.set_shader_parameter("fill_color", GameManager.bear_colors.skin_light)
 	hand_L.material.set_shader_parameter("swap_color", GameManager.bear_colors.skin_dark)
@@ -32,13 +40,17 @@ func _ready():
 	hand_R.material.set_shader_parameter("outline_color", GameManager.chic_outline_color)
 	
 	# set default hand placement positions and rotations
-	HAND_POSITIONS[Vector2.ZERO] = {pos = Vector2.ZERO * GameManager.PIXEL_UNIT / 2, rot = 90}
+#	HAND_POSITIONS[Vector2.ZERO] = {pos = Vector2.ZERO * GameManager.PIXEL_UNIT / 2, rot = 90}
 	HAND_POSITIONS[Vector2.UP] = {pos = Vector2.UP * GameManager.PIXEL_UNIT, rot = 0}
 	HAND_POSITIONS[Vector2.DOWN] = {pos = Vector2.DOWN * GameManager.PIXEL_UNIT / 2, rot = 180}
 	HAND_POSITIONS[Vector2.LEFT] = {pos = Vector2.LEFT * GameManager.PIXEL_UNIT / 2, rot = 90}
 	HAND_POSITIONS[Vector2.RIGHT] = {pos = Vector2.RIGHT * GameManager.PIXEL_UNIT / 2, rot = 90}
 	
-	hands_position = Vector2.ZERO
+	hands_position = Vector2.LEFT
+	
+	for i in cardinal_dirs.size():
+		pd[cardinal_dirs[i]] = pickupDetector.get_child(i)
+		pd[cardinal_dirs[i]].position = cardinal_dirs[i] * GameManager.PIXEL_UNIT * 2
 	
 	# connect the lock timer to unlock the node on timeout
 	lock_timer.timeout.connect(func(): locked = false)
@@ -50,33 +62,31 @@ func _ready():
 	
 	tween.tween_property(indicator, "scale", indicator.scale * 1.2, .5)
 	tween.tween_property(indicator, "scale", indicator.scale, .5)
-	
 
 
 func _unhandled_input(event):
 	if Input.is_action_just_pressed("pick"):
-		if pd.has_overlapping_bodies() and pd.get_overlapping_bodies()[0] is Chic:
-			chic = pd.get_overlapping_bodies()[0]
+		if pd[hands_position].has_overlapping_bodies() and pd[hands_position].get_overlapping_bodies()[0] is Chic:
+			chic = pd[hands_position].get_overlapping_bodies()[0]
 		else:
-			place_chic_back(pd.global_position)
+			place_chic_back(pd[hands_position].global_position)
 
 
 func _process(_delta):
 	move(Input.get_vector("move_left", "move_right", "move_up", "move_down").round())
 	
-	if InputBuffer.is_action_press_buffered("look_left"):
+	if Input.is_action_just_pressed("look_left") or InputBuffer.is_action_press_buffered("look_left"):
 		set_hands_position(Vector2.LEFT)
-	elif InputBuffer.is_action_press_buffered("look_right"):
+	elif  Input.is_action_just_pressed("look_right") or InputBuffer.is_action_press_buffered("look_right"):
 		set_hands_position(Vector2.RIGHT)
-	elif InputBuffer.is_action_press_buffered("look_up"):
+	elif  Input.is_action_just_pressed("look_up") or InputBuffer.is_action_press_buffered("look_up"):
 		set_hands_position(Vector2.UP)
-	elif InputBuffer.is_action_press_buffered("look_down"):
+	elif  Input.is_action_just_pressed("look_down") or InputBuffer.is_action_press_buffered("look_down"):
 		set_hands_position(Vector2.DOWN)
-	
 
 
 func set_hands_position(pos: Vector2 = Vector2.ZERO):
-	if locked or pos == hands_position or not HAND_POSITIONS.has(pos):
+	if pos == hands_position or not HAND_POSITIONS.has(pos):
 		return
 	hands_position = pos
 	
@@ -97,25 +107,36 @@ func set_hands_position(pos: Vector2 = Vector2.ZERO):
 	holding.z_index = 1 if pos == Vector2.DOWN else 0
 	
 	# set chicken detector to the correct position
-	pd.position = pos * GameManager.PIXEL_UNIT * 2
+#	pd.position = pos * GameManager.PIXEL_UNIT * 2
 	indicator.visible = pos != Vector2.ZERO
-	lock(PICKUP_SPEED / 2)
+#	lock(PICKUP_SPEED / 2)
+	
 	
 func lock(timeout: float = 0, add_to_existing: bool = false):
 	locked = true
 	lock_timer.start(timeout + (lock_timer.time_left if add_to_existing else 0.0))
 
+
 func move(dir: Vector2 = Vector2.ZERO):
 	if locked or not [Vector2.LEFT, Vector2.RIGHT, Vector2.UP, Vector2.DOWN].has(dir):
 		return
+	
+	moving = true
+
+	pd[dir].position = dir * GameManager.PIXEL_UNIT * 2
+	if pd[dir].has_overlapping_bodies() and pd[dir].get_overlapping_bodies()[0] is Chic:
+		set_held_chic(pd[dir].get_overlapping_bodies()[0])
 	
 	var tween = get_tree().create_tween()\
 		.set_trans(Tween.TRANS_BACK)\
 		.set_ease(Tween.EASE_OUT)
 	tween.tween_property(self, "global_position", global_position + dir * GameManager.PIXEL_UNIT * 2, PICKUP_SPEED)
 	
-	hands_position = dir
+#	hands_position = dir
+	
+	moving = false
 	lock(PICKUP_SPEED)
+
 
 func set_held_chic(_chic: Chic):
 	if locked:
@@ -124,7 +145,7 @@ func set_held_chic(_chic: Chic):
 
 	if chic and _chic:
 		# swap currently holding with the one we try to hold
-		place_chic_back(pd.global_position)
+		place_chic_back(global_position if moving else pd[hands_position].global_position)
 		
 	chic = _chic
 	if not chic:
@@ -135,20 +156,21 @@ func set_held_chic(_chic: Chic):
 	holding.add_child(chic)
 	
 	# prevent janky movement due to node2D swapping
-	chic.global_position = pd.global_position
+	chic.global_position = global_position if moving else pd[hands_position].global_position
 	chic.z_as_relative = true
 	chic.z_index = 0
 	chic.collision_layer = 1
 	
 	get_tree().create_tween()\
-#		.tween_property(chic, "position", Vector2.ZERO, PICKUP_SPEED)\
-		.tween_property(chic, "global_position", holding.global_position, PICKUP_SPEED)\
+		.tween_property(chic, "position", Vector2.ZERO, PICKUP_SPEED)\
+#		.tween_property(chic, "global_position", holding.global_position, PICKUP_SPEED)\
 		.set_trans(Tween.TRANS_CIRC)\
 		.set_ease(Tween.EASE_IN_OUT)
 		
 	# animation lock to prevent buggy positions
 	lock(PICKUP_SPEED)
-	
+
+
 func place_chic_back(pos: Vector2):
 	if locked or pos == null or not chic:
 		return

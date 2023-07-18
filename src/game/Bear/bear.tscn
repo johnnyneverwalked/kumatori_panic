@@ -15,6 +15,8 @@ shader_parameter/swap_color = Color(1, 1, 1, 1)
 shader_parameter/width = 1.0
 shader_parameter/shadow_threshold = 80.0
 shader_parameter/pattern = 0
+shader_parameter/blink_interval = 1.0
+shader_parameter/can_blink = false
 shader_parameter/inside = false
 shader_parameter/add_margins = false
 
@@ -207,6 +209,8 @@ shader_parameter/swap_color = Color(1, 1, 1, 1)
 shader_parameter/width = 1.0
 shader_parameter/shadow_threshold = 80.0
 shader_parameter/pattern = 0
+shader_parameter/blink_interval = 1.0
+shader_parameter/can_blink = false
 shader_parameter/inside = false
 shader_parameter/add_margins = false
 
@@ -219,6 +223,8 @@ shader_parameter/swap_color = Color(0.447059, 0.278431, 0.109804, 1)
 shader_parameter/width = 1.0
 shader_parameter/shadow_threshold = 80.0
 shader_parameter/pattern = 0
+shader_parameter/blink_interval = 1.0
+shader_parameter/can_blink = false
 shader_parameter/inside = false
 shader_parameter/add_margins = false
 
@@ -259,15 +265,6 @@ position = Vector2(-8, 4)
 texture = ExtResource("6_2qmwo")
 metadata/_edit_lock_ = true
 
-[node name="PickupDetector" type="Area2D" parent="."]
-position = Vector2(-24, 0)
-collision_layer = 0
-collision_mask = 2
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PickupDetector"]
-shape = SubResource("CircleShape2D_aoqxc")
-debug_color = Color(1, 0, 0, 0.490196)
-
 [node name="Indicator" type="Sprite2D" parent="."]
 z_index = -1
 texture_filter = 1
@@ -277,3 +274,41 @@ texture = ExtResource("7_q4cll")
 
 [node name="LockTimer" type="Timer" parent="."]
 one_shot = true
+
+[node name="PickupDetector" type="Node2D" parent="."]
+
+[node name="UP" type="Area2D" parent="PickupDetector"]
+position = Vector2(0, -24)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PickupDetector/UP"]
+shape = SubResource("CircleShape2D_aoqxc")
+debug_color = Color(1, 0, 0, 0.490196)
+
+[node name="DOWN" type="Area2D" parent="PickupDetector"]
+position = Vector2(0, 24)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PickupDetector/DOWN"]
+shape = SubResource("CircleShape2D_aoqxc")
+debug_color = Color(1, 0, 0, 0.490196)
+
+[node name="LEFT" type="Area2D" parent="PickupDetector"]
+position = Vector2(-24, 0)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PickupDetector/LEFT"]
+shape = SubResource("CircleShape2D_aoqxc")
+debug_color = Color(1, 0, 0, 0.490196)
+
+[node name="RIGHT" type="Area2D" parent="PickupDetector"]
+position = Vector2(24, 0)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PickupDetector/RIGHT"]
+shape = SubResource("CircleShape2D_aoqxc")
+debug_color = Color(1, 0, 0, 0.490196)

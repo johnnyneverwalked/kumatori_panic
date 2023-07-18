@@ -4,7 +4,7 @@ extends TileMap
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	position = GameManager.PIXEL_UNIT *Vector2.ONE
-	place_cells(Vector2.ONE * 5)
+	place_cells(Vector2.ONE * 15)
 	
 
 

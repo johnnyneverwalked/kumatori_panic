@@ -15,6 +15,8 @@ shader_parameter/swap_color = Color(1, 1, 1, 1)
 shader_parameter/width = 1.0
 shader_parameter/shadow_threshold = 80.0
 shader_parameter/pattern = 0
+shader_parameter/blink_interval = 1.0
+shader_parameter/can_blink = false
 shader_parameter/inside = false
 shader_parameter/add_margins = true
 
@@ -58,7 +60,7 @@ animations = [{
 script = ExtResource("1_61h8o")
 
 [node name="Camera2D" type="Camera2D" parent="."]
-zoom = Vector2(4, 4)
+zoom = Vector2(2, 2)
 
 [node name="Bear" parent="." instance=ExtResource("1_s3fbk")]
 
@@ -90,12 +92,13 @@ position = Vector2(-72, 40)
 position = Vector2(-8, 40)
 
 [node name="Grass" parent="." instance=ExtResource("4_yo0vf")]
+visible = true
 
 [node name="EggTimer" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 material = SubResource("ShaderMaterial_gqbyl")
-position = Vector2(-152, 72)
-scale = Vector2(1.5, 1.5)
+position = Vector2(-208, 96)
+scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_8xhne")
 autoplay = "default"
 frame_progress = 0.704011
