@@ -10,6 +10,7 @@ var swapping_tracks: bool
 var current_track: int = 0
 
 func _ready():
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	bgmPlayer = AudioStreamPlayer.new()
 	bgmPlayer.bus = "BGM"
 #	set_volume(bgmPlayer, .6)

@@ -48,6 +48,12 @@ func _ready():
 	
 	hands_position = Vector2.LEFT
 	
+	body.scale = Vector2.ZERO
+	get_tree().create_tween()\
+		.tween_property(body, "scale", Vector2.ONE, .25)\
+		.set_trans(Tween.TRANS_ELASTIC)\
+		.set_ease(Tween.EASE_OUT)
+	
 	for i in cardinal_dirs.size():
 		pd[cardinal_dirs[i]] = pickupDetector.get_child(i)
 		pd[cardinal_dirs[i]].position = cardinal_dirs[i] * GameManager.PIXEL_UNIT * 2
@@ -55,7 +61,7 @@ func _ready():
 	# connect the lock timer to unlock the node on timeout
 	lock_timer.timeout.connect(func(): locked = false)
 	
-	var tween = get_tree().create_tween().set_loops()\
+	var tween = get_tree().create_tween().set_loops().bind_node(self)\
 		.set_trans(Tween.TRANS_CIRC)\
 		.set_ease(Tween.EASE_IN_OUT)
 	
@@ -64,7 +70,7 @@ func _ready():
 	tween.tween_property(indicator, "scale", indicator.scale, .5)
 
 
-func _unhandled_input(event):
+func _input(_event):
 	if Input.is_action_just_pressed("pick"):
 		if pd[hands_position].has_overlapping_bodies() and pd[hands_position].get_overlapping_bodies()[0] is Chic:
 			chic = pd[hands_position].get_overlapping_bodies()[0]
@@ -125,7 +131,14 @@ func move(dir: Vector2 = Vector2.ZERO):
 
 	pd[dir].position = dir * GameManager.PIXEL_UNIT * 2
 	if pd[dir].has_overlapping_bodies() and pd[dir].get_overlapping_bodies()[0] is Chic:
-		set_held_chic(pd[dir].get_overlapping_bodies()[0])
+		var target_chic = pd[dir].get_overlapping_bodies()[0]
+		if Input.is_action_pressed("hold") and chic:
+			get_tree().create_tween()\
+				.tween_property(target_chic, "global_position", global_position, PICKUP_SPEED)\
+				.set_trans(Tween.TRANS_CIRC)\
+				.set_ease(Tween.EASE_IN_OUT)
+		else:
+			set_held_chic(target_chic)
 	
 	var tween = get_tree().create_tween()\
 		.set_trans(Tween.TRANS_BACK)\
@@ -166,7 +179,7 @@ func set_held_chic(_chic: Chic):
 #		.tween_property(chic, "global_position", holding.global_position, PICKUP_SPEED)\
 		.set_trans(Tween.TRANS_CIRC)\
 		.set_ease(Tween.EASE_IN_OUT)
-		
+	
 	# animation lock to prevent buggy positions
 	lock(PICKUP_SPEED)
 
@@ -180,16 +193,21 @@ func place_chic_back(pos: Vector2):
 	
 	# prevent janky movement due to node2D swapping
 	chic.global_position = holding.global_position
-	chic.z_as_relative = false
-	chic.z_index = 1
 	chic.collision_layer = 2
+	chic.z_as_relative = false
+	chic.z_index = 2
 	
-	get_tree().create_tween()\
-		.tween_property(chic, "global_position", pos, PICKUP_SPEED)\
+	var tween = get_tree().create_tween()
+	tween.tween_property(chic, "global_position", pos, PICKUP_SPEED)\
 		.set_trans(Tween.TRANS_CIRC)\
 		.set_ease(Tween.EASE_IN_OUT)
 	
+	var prev_chic = chic
 	chic = null
+	
+	tween.finished.connect(func():
+		prev_chic.z_index = 1
+	)
 	
 	# animation lock to prevent buggy positions
 	lock(PICKUP_SPEED)

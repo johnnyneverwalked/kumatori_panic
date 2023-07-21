@@ -1,0 +1,120 @@
+[gd_scene load_steps=5 format=3 uid="uid://cpjeiyn0pyu5x"]
+
+[ext_resource type="Script" path="res://src/pause.gd" id="1_2qr7q"]
+[ext_resource type="Shader" path="res://src/shaders/vhs.gdshader" id="1_lbw07"]
+[ext_resource type="Theme" uid="uid://dd2gdeigo2urf" path="res://src/resources/main_theme.tres" id="2_obxdd"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mtixt"]
+shader = ExtResource("1_lbw07")
+shader_parameter/shake = 0.001
+shader_parameter/noiseQuality = 250.0
+shader_parameter/noiseIntensity = 0.002
+shader_parameter/offsetIntensity = 0.05
+shader_parameter/colorOffsetIntensity = 0.5
+
+[node name="Pause" type="CanvasLayer"]
+process_mode = 2
+visible = false
+script = ExtResource("1_2qr7q")
+
+[node name="PauseOverlay" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PauseBackdrop" type="ColorRect" parent="PauseOverlay"]
+layout_mode = 2
+anchor_left = 0.022
+anchor_top = 0.03
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -31.68
+offset_top = -24.3
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0.431373, 0.588235)
+
+[node name="Margin" type="MarginContainer" parent="PauseOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 16
+
+[node name="PauseLabel" type="Label" parent="PauseOverlay/Margin"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme = ExtResource("2_obxdd")
+theme_override_colors/font_color = Color(1, 1, 1, 0.882353)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 2
+theme_override_font_sizes/font_size = 64
+text = "PAUSED II"
+
+[node name="PauseEffect" type="ColorRect" parent="PauseOverlay"]
+material = SubResource("ShaderMaterial_mtixt")
+layout_mode = 2
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MenuContainer" type="VBoxContainer" parent="PauseOverlay"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.55
+anchor_right = 1.0
+anchor_bottom = 0.55
+offset_top = -142.0
+offset_bottom = 142.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 16
+
+[node name="Play" type="Button" parent="PauseOverlay/MenuContainer"]
+layout_mode = 2
+theme = ExtResource("2_obxdd")
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/font_size = 64
+text = "continue"
+
+[node name="HowTo" type="Button" parent="PauseOverlay/MenuContainer"]
+layout_mode = 2
+theme = ExtResource("2_obxdd")
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/font_size = 64
+text = "How to play"
+
+[node name="MainMenu" type="Button" parent="PauseOverlay/MenuContainer"]
+layout_mode = 2
+theme = ExtResource("2_obxdd")
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/font_size = 64
+text = "main menu"
+
+[node name="Exit" type="Button" parent="PauseOverlay/MenuContainer"]
+layout_mode = 2
+theme = ExtResource("2_obxdd")
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/font_size = 64
+text = "quit"
+
+[connection signal="button_up" from="PauseOverlay/MenuContainer/Play" to="." method="_on_play_button_up"]
+[connection signal="button_up" from="PauseOverlay/MenuContainer/Exit" to="." method="_on_exit_button_up"]

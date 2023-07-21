@@ -3,7 +3,9 @@ extends Node
 const PIXEL_UNIT: int = 16
 
 const sfx: Dictionary = {
-	
+	rooster = preload("res://assets/audio/sfx/rooster.ogg"),
+	pause = preload("res://assets/audio/sfx/pause.ogg"),
+	clock_tick = preload("res://assets/audio/sfx/clock_tick.ogg"),
 }
 
 enum Colors {WHITE, BLUE, YELLOW, RED, PINK, GREEN, }
@@ -32,8 +34,23 @@ var time_scale: float = 1: set = set_time_scale
 var first_time_load: bool = true
 
 func _ready():
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	SoundController.set_sound_volume(20)
+	var pause_node = load("res://src/pause.tscn")
+	add_sibling.call_deferred(pause_node.instantiate())
 	randomize()
+
+func _notification(what):
+	
+	match what:
+		NOTIFICATION_WM_CLOSE_REQUEST:
+			print_debug(what)
+			get_tree().quit() # default behavior
+	
+func _unhandled_input(event):
+	if event.is_action("ui_cancel") and not get_tree().paused:
+		SoundController.play_sound(sfx.pause)
+		get_tree().paused = true
 	
 func start_game():
 	first_time_load = false

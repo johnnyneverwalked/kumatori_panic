@@ -1,0 +1,128 @@
+[gd_scene load_steps=14 format=3 uid="uid://cfnpgolpb33o2"]
+
+[ext_resource type="Shader" path="res://src/shaders/outline.gdshader" id="1_qakd0"]
+[ext_resource type="Texture2D" uid="uid://dlk7qgjyuoqcv" path="res://assets/sprites/egg_timer-2.png" id="2_vt0s2"]
+[ext_resource type="Script" path="res://src/game/EggTimer/egg_timer.gd" id="3_ytgm6"]
+[ext_resource type="FontFile" uid="uid://dnb6fpkbjrcy" path="res://assets/ui/fonts/ThaleahFat.ttf" id="4_a3w8i"]
+[ext_resource type="Theme" uid="uid://dd2gdeigo2urf" path="res://src/resources/main_theme.tres" id="4_a5u5n"]
+
+[sub_resource type="Animation" id="Animation_ulvy1"]
+resource_name = "timeout"
+step = 0.0166667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3, 0.433333, 0.833333),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(2, 2), Vector2(3, 1), Vector2(1, 3), Vector2(2, 2), Vector2(2, 2)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3, 0.833333),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 16), Vector2(0, -32), Vector2(0, -32)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_v33rw"]
+_data = {
+"timeout": SubResource("Animation_ulvy1")
+}
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gqbyl"]
+shader = ExtResource("1_qakd0")
+shader_parameter/outline_color = Color(0.223529, 0.203922, 0.341176, 1)
+shader_parameter/fill_color = Color(1, 1, 1, 1)
+shader_parameter/swap_color = Color(1, 1, 1, 1)
+shader_parameter/width = 1.0
+shader_parameter/shadow_threshold = 80.0
+shader_parameter/pattern = 0
+shader_parameter/blink_interval = 1.0
+shader_parameter/can_blink = false
+shader_parameter/inside = false
+shader_parameter/add_margins = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gbqmv"]
+atlas = ExtResource("2_vt0s2")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5fp6e"]
+atlas = ExtResource("2_vt0s2")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ymlqp"]
+atlas = ExtResource("2_vt0s2")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_es1kl"]
+atlas = ExtResource("2_vt0s2")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_8xhne"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gbqmv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5fp6e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ymlqp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_es1kl")
+}],
+"loop": true,
+"name": &"default",
+"speed": 8.0
+}]
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("3_ytgm6")
+time = 3
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../EggTimer")
+libraries = {
+"": SubResource("AnimationLibrary_v33rw")
+}
+
+[node name="Timer" type="Timer" parent="."]
+
+[node name="EggTimer" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+material = SubResource("ShaderMaterial_gqbyl")
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_8xhne")
+autoplay = "default"
+frame_progress = 0.746259
+
+[node name="Time" type="Label" parent="EggTimer"]
+texture_filter = 1
+anchors_preset = -1
+anchor_left = 0.25
+anchor_top = 0.5
+anchor_right = 0.75
+anchor_bottom = 0.5
+offset_left = -12.0
+offset_top = -21.0
+offset_right = -12.0
+offset_bottom = -3.0
+grow_horizontal = 2
+scale = Vector2(0.5, 0.5)
+theme = ExtResource("4_a5u5n")
+theme_override_colors/font_color = Color(0.223529, 0.203922, 0.341176, 1)
+theme_override_fonts/font = ExtResource("4_a3w8i")
+text = "00"
+metadata/_edit_lock_ = true

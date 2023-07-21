@@ -1,0 +1,36 @@
+[gd_resource type="Theme" load_steps=6 format=3 uid="uid://dd2gdeigo2urf"]
+
+[ext_resource type="FontFile" uid="uid://dnb6fpkbjrcy" path="res://assets/ui/fonts/ThaleahFat.ttf" id="1_58vg6"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3784l"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+shadow_color = Color(0, 0, 0, 0.294118)
+shadow_size = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sk20x"]
+bg_color = Color(0, 0, 0, 0)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_color = Color(0, 0, 0, 0.196078)
+shadow_size = 16
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3y4gw"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vkoyn"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_color = Color(1, 1, 1, 0.392157)
+shadow_size = 32
+
+[resource]
+default_font = ExtResource("1_58vg6")
+default_font_size = 16
+Button/styles/focus = SubResource("StyleBoxFlat_3784l")
+Button/styles/hover = SubResource("StyleBoxFlat_sk20x")
+Button/styles/normal = SubResource("StyleBoxEmpty_3y4gw")
+Button/styles/pressed = SubResource("StyleBoxFlat_vkoyn")
