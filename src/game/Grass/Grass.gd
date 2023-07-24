@@ -2,6 +2,8 @@ extends TileMap
 
 const DEFAULT_POSITION: Vector2 = GameManager.PIXEL_UNIT * (Vector2.ONE) * 2 
 
+var offset_position = Vector2.ZERO
+
 @onready var backdrop: = $Backdrop
 
 # Called when the node enters the scene tree for the first time.
@@ -10,11 +12,13 @@ func _ready():
 	
 
 func place_cells(grid_size: Vector2 = Vector2.ONE):
-	position = DEFAULT_POSITION
+	offset_position = Vector2.ZERO
 	if int(grid_size.x) % 2:
-		position.x -= GameManager.PIXEL_UNIT
+		offset_position.x -= GameManager.PIXEL_UNIT
 	if int(grid_size.y) % 2:
-		position.y -= GameManager.PIXEL_UNIT
+		offset_position.y -= GameManager.PIXEL_UNIT
+	
+	position = DEFAULT_POSITION + offset_position
 	
 	for cell in get_used_cells(0):
 		erase_cell(0, cell)

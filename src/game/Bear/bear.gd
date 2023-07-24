@@ -3,6 +3,7 @@ extends CharacterBody2D
 class_name Bear
 
 signal place_chic(chic)
+signal unlock
 
 @export var chic: Chic: set = set_held_chic
 
@@ -59,7 +60,10 @@ func _ready():
 		pd[cardinal_dirs[i]].position = cardinal_dirs[i] * GameManager.PIXEL_UNIT * 2
 	
 	# connect the lock timer to unlock the node on timeout
-	lock_timer.timeout.connect(func(): locked = false)
+	lock_timer.timeout.connect(func(): 
+		locked = false
+		unlock.emit()
+	)
 	
 	var tween = get_tree().create_tween().set_loops().bind_node(self)\
 		.set_trans(Tween.TRANS_CIRC)\
