@@ -9,7 +9,6 @@ var offset_position = Vector2.ZERO
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	position = DEFAULT_POSITION
-	
 
 func place_cells(grid_size: Vector2 = Vector2.ONE):
 	offset_position = Vector2.ZERO

@@ -27,6 +27,7 @@ var pd: Dictionary = {
 
 var locked: bool
 var moving: bool
+var bounds: Rect2
 var hands_position: Vector2 = Vector2.UP: set = set_hands_position
 
 func _ready():
@@ -131,6 +132,10 @@ func move(dir: Vector2 = Vector2.ZERO):
 	if locked or not [Vector2.LEFT, Vector2.RIGHT, Vector2.UP, Vector2.DOWN].has(dir):
 		return
 	
+	var pos = global_position + dir * GameManager.PIXEL_UNIT * 2
+	if is_out_of_bounds(pos):
+		return
+	
 	moving = true
 
 	pd[dir].position = dir * GameManager.PIXEL_UNIT * 2
@@ -189,7 +194,7 @@ func set_held_chic(_chic: Chic):
 
 
 func place_chic_back(pos: Vector2):
-	if locked or pos == null or not chic:
+	if locked or not chic or is_out_of_bounds(pos):
 		return
 	
 	holding.remove_child(chic)
@@ -216,3 +221,5 @@ func place_chic_back(pos: Vector2):
 	# animation lock to prevent buggy positions
 	lock(PICKUP_SPEED)
 
+func is_out_of_bounds(pos: Vector2):
+	return bounds == null or pos == null or not bounds.has_point(pos)
