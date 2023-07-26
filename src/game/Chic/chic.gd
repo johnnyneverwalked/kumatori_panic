@@ -3,6 +3,7 @@ extends CharacterBody2D
 class_name Chic
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var animation: AnimationPlayer = $AnimationPlayer
 @export var color: GameManager.Colors: set = set_chic_color
 
 # Called when the node enters the scene tree for the first time.
@@ -20,6 +21,11 @@ func _ready():
 		.set_trans(Tween.TRANS_ELASTIC)\
 		.set_ease(Tween.EASE_OUT)
 
+func fly():
+	sprite.get_node("Wing").visible = true
+	sprite.get_node("Wing2").visible = true
+	animation.play("walk")
+	sprite.play("walk")
 
 func set_chic_color(_color: GameManager.Colors = GameManager.Colors.WHITE):
 	color = _color

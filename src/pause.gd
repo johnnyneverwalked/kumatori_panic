@@ -22,12 +22,14 @@ func _process(_delta):
 	if not visible:
 		visible = true
 		play_btn.grab_focus()
+		SoundController.bgmPlayer.stream_paused = true
 		
 
 func unpause():
 	SoundController.play_sound(GameManager.sfx.pause)
 	await get_tree().create_timer(.25).timeout
 	visible = false
+	SoundController.bgmPlayer.stream_paused = false
 	get_tree().paused = false
 
 func _on_play_button_up():

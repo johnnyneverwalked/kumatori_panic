@@ -3,6 +3,7 @@ extends Node2D
 @onready var grass: TileMap = $Grass
 @onready var bg: TextureRect = $Bg
 @onready var camera: Camera2D = GameManager.cam
+@onready var nest: Node2D = $Nest
 
 var chic_node = load("res://src/game/Chic/chic.tscn")
 var bear_node = load("res://src/game/Bear/bear.tscn")
@@ -14,11 +15,12 @@ var grid:= Vector2.ZERO
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	SoundController.play_music(GameManager.bgm.main)
 	randomize()
 	var tween = get_tree().create_tween().set_loops()\
 	.set_trans(Tween.TRANS_SINE)\
 	.set_ease(Tween.EASE_IN_OUT)
-	print_debug(get_viewport_rect())
+
 	tween.tween_property(
 		bg, 
 		"global_position", 
@@ -35,7 +37,16 @@ func _ready():
 		60
 	).set_delay(15)
 	
-	# generate_level(Vector2.ONE * 8)
+	GameManager.game_over.connect(func(won):
+		if (won):
+			gather_chics() 
+			return
+		
+		await get_tree().create_timer(2).timeout
+		leave_chics()
+	)
+	
+	generate_level(Vector2.ONE * 8)
 
 func _unhandled_input(event):
 	if not locked and event.is_action_pressed("debug"):
@@ -45,14 +56,13 @@ func _unhandled_input(event):
 func generate_level(_grid: Vector2 = Vector2.ZERO):
 	locked = true
 
-	if not (grid.x > 0 and grid.y > 0):
-		# grid = Vector2(randi_range(3, 8), randi_range(3, 8))
-		grid = Vector2.ONE * 2
-	grid += Vector2.ONE	
+	if not (_grid.x > 0 and _grid.y > 0):
+		_grid = Vector2(randi_range(3, 8), randi_range(3, 8))
+	grid = _grid
 	
 	var available_colors: int = min(GameManager.Colors.size() - 1, max(1, floor((grid.x + grid.y) / 3 - .5)))
 		
-	for chic in $Nest.get_children():
+	for chic in nest.get_children():
 		chic.queue_free()
 		
 	if bear: 
@@ -90,7 +100,7 @@ func generate_level(_grid: Vector2 = Vector2.ZERO):
 			
 		var chic = chic_node.instantiate()
 		chic.color = randi_range(0, available_colors)
-		$Nest.add_child(chic)
+		nest.add_child(chic)
 		chic.global_position = world_pos
 		await get_tree().create_timer(.01).timeout
 	
@@ -102,7 +112,28 @@ func generate_level(_grid: Vector2 = Vector2.ZERO):
 func place_chic(chic: Chic):
 	if not chic:
 		return
-	$Nest.add_child(chic)
+	nest.add_child(chic)
+
+func gather_chics():
+	pass
+
+func leave_chics():
+	var dir: int
+	var screen_coords = get_viewport_rect().size / GameManager.cam.zoom
+	var tween = get_tree().create_tween().set_parallel(true)\
+		.set_ease(Tween.EASE_IN)\
+		.set_trans(Tween.TRANS_SINE)
+	SoundController.sfxPlayer.pitch_scale = 1.5
+	SoundController.play_sound(GameManager.sfx.chic_flying, false)
+	for chic in nest.get_children():
+		randomize()
+		dir = 1 if randi() % 2 else -1
+		chic.fly()
+		chic.scale.x = -dir
+		chic.z_index = 3
+		chic.z_as_relative = false
+		tween.tween_property(chic, "global_position:x", dir * randi_range(0, screen_coords.x * 2) / 2, 1.5)
+		tween.tween_property(chic, "global_position:y", -screen_coords.y, 1.5)
 
 func check_board():
 	# the total found color groups in the map
@@ -117,7 +148,7 @@ func check_board():
 	# The number of chics in the map
 	var total_chics = grass.get_used_rect().size.x * grass.get_used_rect().size.y - 1
 	
-	for chic in $Nest.get_children():
+	for chic in nest.get_children():
 		color_map[Vector2(grass.local_to_map(grass.to_local(chic.global_position)))] = chic.color
 		if not colors.has(chic.color):
 			colors.append(chic.color)
@@ -143,7 +174,6 @@ func check_board():
 
 	# If all the chics are on the ground and all same colored ones are grouped together we win
 	var winning: bool = groups == colors.size()
-
 
 func _draw():
 	if bounds != null:

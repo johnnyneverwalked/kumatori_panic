@@ -29,6 +29,7 @@ layer_1/tile_data = PackedInt32Array()
 script = ExtResource("3_d7wp4")
 
 [node name="Backdrop" type="TextureRect" parent="."]
+visible = false
 offset_right = 104.0
 offset_bottom = 8.0
 texture = SubResource("GradientTexture2D_2e0hm")

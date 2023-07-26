@@ -16,6 +16,8 @@ signal unlock
 @onready var pickupDetector: Node2D = $PickupDetector
 @onready var lock_timer: Timer = $LockTimer
 @onready var indicator: Sprite2D = $Indicator
+@onready var indicator_inner: Sprite2D = $Indicator/IndicatorInner
+@onready var sweat: GPUParticles2D = $Sweat
 
 const PICKUP_SPEED = .2
 var HAND_POSITIONS: Dictionary = {
@@ -30,6 +32,8 @@ var locked: bool
 var moving: bool
 var bounds: Rect2
 var hands_position: Vector2 = Vector2.UP: set = set_hands_position
+
+var sweat_timeout: float = randf_range(2.0, 10.0)
 
 func _ready():
 	var cardinal_dirs = [Vector2.UP, Vector2.DOWN, Vector2.LEFT, Vector2.RIGHT]
@@ -67,6 +71,15 @@ func _ready():
 		unlock.emit()
 	)
 	
+	GameManager.game_over.connect(func(won: bool):
+		locked = true
+		lock_timer.stop()
+		if chic:
+			holding.remove_child(chic)
+			place_chic.emit(chic)
+			chic.global_position = holding.global_position
+	)
+	
 	var tween = get_tree().create_tween().set_loops().bind_node(self)\
 		.set_trans(Tween.TRANS_CIRC)\
 		.set_ease(Tween.EASE_IN_OUT)
@@ -84,11 +97,15 @@ func _input(_event):
 			chic = pd[hands_position].get_overlapping_bodies()[0]
 		else:
 			place_chic_back(pd[hands_position].global_position)
+	
 
 
-func _process(_delta):
+func _process(delta):
 	if demo:
 		return
+		
+	indicator_inner.visible = Input.is_action_pressed("hold")
+	
 	move(Input.get_vector("move_left", "move_right", "move_up", "move_down").round())
 	
 	if Input.is_action_just_pressed("look_left") or InputBuffer.is_action_press_buffered("look_left"):
@@ -99,6 +116,14 @@ func _process(_delta):
 		set_hands_position(Vector2.UP)
 	elif  Input.is_action_just_pressed("look_down") or InputBuffer.is_action_press_buffered("look_down"):
 		set_hands_position(Vector2.DOWN)
+	
+	if locked:
+		return
+		
+	if sweat_timeout <= 0:
+		sweat_timeout = randf_range(5.0, 15.0)
+		sweat.emitting = true
+	sweat_timeout -= delta
 
 
 func set_hands_position(pos: Vector2 = Vector2.ZERO):
@@ -181,6 +206,7 @@ func set_held_chic(_chic: Chic):
 	# add new chic to our hands
 	chic.get_parent().remove_child(chic)
 	holding.add_child(chic)
+	SoundController.play_sound(GameManager.sfx.chic_jump)
 	
 	# prevent janky movement due to node2D swapping
 	chic.global_position = global_position if moving else pd[hands_position].global_position
@@ -204,6 +230,7 @@ func place_chic_back(pos: Vector2):
 	
 	holding.remove_child(chic)
 	place_chic.emit(chic)
+	SoundController.play_sound(GameManager.sfx.chic_jump)
 	
 	# prevent janky movement due to node2D swapping
 	chic.global_position = holding.global_position

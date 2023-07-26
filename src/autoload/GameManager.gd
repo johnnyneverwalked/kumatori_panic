@@ -1,11 +1,21 @@
 extends Node
 
+signal game_over(won)
+
 const PIXEL_UNIT: int = 16
 
 const sfx: Dictionary = {
 	rooster = preload("res://assets/audio/sfx/rooster.ogg"),
 	pause = preload("res://assets/audio/sfx/pause.ogg"),
+	block = preload("res://assets/audio/sfx/Block Break 1.ogg"),
+	collect = preload("res://assets/audio/sfx/Big Egg collect 1.ogg"),
 	clock_tick = preload("res://assets/audio/sfx/clock_tick.ogg"),
+	chic_jump = preload("res://assets/audio/sfx/Jump 1.ogg"),
+	chic_flying = preload("res://assets/audio/sfx/flying.ogg"),
+	chic_jump_looped = preload("res://assets/audio/sfx/Jump looped.ogg"),
+}
+const bgm: Dictionary = {
+	main = preload("res://assets/audio/bgm/level_jingle.ogg")
 }
 
 enum Colors {WHITE, YELLOW, RED, BLUE, PINK, GREEN }
@@ -16,6 +26,7 @@ const chic_colors: Dictionary = {
 	Colors.RED: Color("#cb4d68"),
 	Colors.PINK: Color("#f7a4c4"),
 	Colors.GREEN: Color("#5bb361"),
+	Colors.WHITE: Color.WHITE
 }
 const bear_colors: Dictionary = {
 	skin_dark = Color("#72471c"),
@@ -31,13 +42,10 @@ const chic_outline_color: Color = Color("#393457")
 
 
 var time_scale: float = 1: set = set_time_scale
-var first_time_load: bool = true
 var cam: Camera2D
 
 func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	
-	SoundController.set_sound_volume(20)
 	
 	var pause_node = load("res://src/pause.tscn")
 	add_sibling.call_deferred(pause_node.instantiate())
@@ -60,9 +68,7 @@ func _unhandled_input(event):
 	if event.is_action("ui_cancel") and not get_tree().paused:
 		SoundController.play_sound(sfx.pause)
 		get_tree().paused = true
-	
-func start_game():
-	first_time_load = false
+
 
 func set_time_scale(_time_scale: float = 1):
 	time_scale = clamp(_time_scale, .2, 1.0)

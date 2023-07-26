@@ -28,11 +28,15 @@ func _ready():
 		# stop animated timer
 		sprite.stop()
 		
+		AudioServer.playback_speed_scale = 1
+		
 		# jump
 		animationP.play("timeout")
 		await get_tree().create_timer(.3).timeout
+		SoundController.bgmPlayer.stop()
+		GameManager.game_over.emit(false)
 		
-		SoundController.play_sound(GameManager.sfx.rooster)
+		SoundController.play_sound(GameManager.sfx.rooster, false)
 		
 		# vibrate
 		var tween = get_tree().create_tween().set_loops(25)
@@ -54,10 +58,8 @@ func _ready():
 func update_time(current: float = 0):
 	timeLbl.text = ("0" if current < 10 else "") + str(current)
 	if current == alert_at:
-		AudioServer.playback_speed_scale = 4
+		AudioServer.playback_speed_scale = 1.5
 		SoundController.play_sound(GameManager.sfx.clock_tick)
-		await SoundController.sound_fininshed
-		AudioServer.playback_speed_scale = 1
 		
 
 func start():
@@ -66,10 +68,12 @@ func start():
 	elapsed_time = time
 	timer.start(1)
 	sprite.play()
+	animationP.play("idle")
 
 func stop():
 	timer.stop()
 	sprite.stop()
+	AudioServer.playback_speed_scale = 1
 
 func pause_time(paused: bool = true):
 	timer.paused = paused

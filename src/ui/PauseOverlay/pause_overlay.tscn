@@ -1,0 +1,67 @@
+[gd_scene load_steps=5 format=3 uid="uid://c13ku2nlnxwbi"]
+
+[ext_resource type="Script" path="res://src/ui/PauseOverlay/pause_overlay.gd" id="1_tmqwj"]
+[ext_resource type="Theme" uid="uid://dd2gdeigo2urf" path="res://src/resources/main_theme.tres" id="1_ued33"]
+[ext_resource type="Shader" path="res://src/shaders/vhs.gdshader" id="2_2y2fx"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mtixt"]
+shader = ExtResource("2_2y2fx")
+shader_parameter/shake = 0.001
+shader_parameter/noiseQuality = 250.0
+shader_parameter/noiseIntensity = 0.002
+shader_parameter/offsetIntensity = 0.05
+shader_parameter/colorOffsetIntensity = 0.5
+
+[node name="PauseOverlay" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_tmqwj")
+
+[node name="PauseBackdrop" type="ColorRect" parent="."]
+layout_mode = 2
+anchor_left = 0.022
+anchor_top = 0.03
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -31.68
+offset_top = -24.3
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0.431373, 0.588235)
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 16
+
+[node name="PauseLabel" type="Label" parent="Margin"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme = ExtResource("1_ued33")
+theme_override_colors/font_color = Color(1, 1, 1, 0.882353)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 2
+theme_override_font_sizes/font_size = 64
+text = "PAUSED II"
+
+[node name="PauseEffect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_mtixt")
+layout_mode = 2
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
