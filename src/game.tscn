@@ -1,14 +1,16 @@
-[gd_scene load_steps=5 format=3 uid="uid://ckgk82uemd4bg"]
+[gd_scene load_steps=6 format=3 uid="uid://ckgk82uemd4bg"]
 
 [ext_resource type="Script" path="res://src/game.gd" id="1_61h8o"]
 [ext_resource type="Texture2D" uid="uid://b2rvs821tidmp" path="res://assets/sprites/allbackgroundstars.png" id="2_5lga2"]
 [ext_resource type="PackedScene" uid="uid://cfnpgolpb33o2" path="res://src/game/EggTimer/egg_timer.tscn" id="4_8cmid"]
 [ext_resource type="PackedScene" uid="uid://px8uey4vnmw4" path="res://src/game/Grass/tile_map.tscn" id="4_yo0vf"]
+[ext_resource type="Theme" uid="uid://dd2gdeigo2urf" path="res://src/resources/main_theme.tres" id="5_45ks5"]
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_61h8o")
 
 [node name="Bg" type="TextureRect" parent="."]
+z_index = -1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -21,9 +23,6 @@ grow_vertical = 2
 texture = ExtResource("2_5lga2")
 expand_mode = 1
 stretch_mode = 6
-
-[node name="Camera2D" type="Camera2D" parent="."]
-zoom = Vector2(3, 3)
 
 [node name="Grass" parent="." instance=ExtResource("4_yo0vf")]
 
@@ -42,3 +41,25 @@ width = 1.0
 [node name="Line2D2" type="Line2D" parent="."]
 points = PackedVector2Array(-240, 0, 240, 0)
 width = 1.0
+
+[node name="ui" type="CanvasLayer" parent="."]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ui"]
+anchors_preset = -1
+anchor_left = -0.161
+anchor_top = -0.158
+anchor_right = -0.117
+anchor_bottom = 0.069
+offset_left = -0.159973
+offset_top = -0.0199966
+offset_right = 0.480011
+offset_bottom = 0.109997
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("5_45ks5")
+
+[node name="Stage" type="Label" parent="ui/VBoxContainer"]
+layout_mode = 2
+text = "stage: 20"

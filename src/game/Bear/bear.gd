@@ -6,6 +6,7 @@ signal place_chic(chic)
 signal unlock
 
 @export var chic: Chic: set = set_held_chic
+@export var demo: bool: set = set_demo
 
 @onready var body: AnimatedSprite2D = $Body
 @onready var hands: Node2D = $Hands
@@ -76,6 +77,8 @@ func _ready():
 
 
 func _input(_event):
+	if demo:
+		return
 	if Input.is_action_just_pressed("pick"):
 		if pd[hands_position].has_overlapping_bodies() and pd[hands_position].get_overlapping_bodies()[0] is Chic:
 			chic = pd[hands_position].get_overlapping_bodies()[0]
@@ -84,6 +87,8 @@ func _input(_event):
 
 
 func _process(_delta):
+	if demo:
+		return
 	move(Input.get_vector("move_left", "move_right", "move_up", "move_down").round())
 	
 	if Input.is_action_just_pressed("look_left") or InputBuffer.is_action_press_buffered("look_left"):
@@ -223,3 +228,8 @@ func place_chic_back(pos: Vector2):
 
 func is_out_of_bounds(pos: Vector2):
 	return bounds == null or pos == null or not bounds.has_point(pos)
+
+func set_demo(_demo: bool):
+	demo = _demo
+	indicator.visible = indicator.visible and not demo
+	

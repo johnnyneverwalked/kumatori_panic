@@ -8,7 +8,7 @@ const sfx: Dictionary = {
 	clock_tick = preload("res://assets/audio/sfx/clock_tick.ogg"),
 }
 
-enum Colors {WHITE, BLUE, YELLOW, RED, PINK, GREEN, }
+enum Colors {WHITE, YELLOW, RED, BLUE, PINK, GREEN }
 
 const chic_colors: Dictionary = {
 	Colors.BLUE: Color("#11adc1"),
@@ -32,12 +32,22 @@ const chic_outline_color: Color = Color("#393457")
 
 var time_scale: float = 1: set = set_time_scale
 var first_time_load: bool = true
+var cam: Camera2D
 
 func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	
 	SoundController.set_sound_volume(20)
+	
 	var pause_node = load("res://src/pause.tscn")
 	add_sibling.call_deferred(pause_node.instantiate())
+	
+	cam = Camera2D.new()
+	
+	cam.enabled = true
+	cam.zoom = Vector2.ONE * 3
+	add_sibling.call_deferred(cam)
+	
 	randomize()
 
 func _notification(what):

@@ -98,7 +98,6 @@ theme = ExtResource("2_obxdd")
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 16
 theme_override_font_sizes/font_size = 64
-text = "How to play"
 
 [node name="MainMenu" type="Button" parent="PauseOverlay/MenuContainer"]
 layout_mode = 2
