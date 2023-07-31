@@ -12,7 +12,7 @@ dest_files=["res://.godot/imported/level_jingle.ogg-d276ae37a7f7001bd18f0e2a6af5
 
 [params]
 
-loop=false
+loop=true
 loop_offset=0
 bpm=0
 beat_count=0

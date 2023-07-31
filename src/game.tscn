@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://ckgk82uemd4bg"]
+[gd_scene load_steps=7 format=3 uid="uid://ckgk82uemd4bg"]
 
 [ext_resource type="Script" path="res://src/game.gd" id="1_61h8o"]
 [ext_resource type="Texture2D" uid="uid://b2rvs821tidmp" path="res://assets/sprites/allbackgroundstars.png" id="2_5lga2"]
 [ext_resource type="PackedScene" uid="uid://cfnpgolpb33o2" path="res://src/game/EggTimer/egg_timer.tscn" id="4_8cmid"]
+[ext_resource type="Texture2D" uid="uid://b8lr2cuhdpjke" path="res://assets/sprites/crosshair113.png" id="4_16ab6"]
 [ext_resource type="PackedScene" uid="uid://px8uey4vnmw4" path="res://src/game/Grass/tile_map.tscn" id="4_yo0vf"]
 [ext_resource type="Theme" uid="uid://dd2gdeigo2urf" path="res://src/resources/main_theme.tres" id="5_45ks5"]
 
@@ -23,44 +24,116 @@ grow_vertical = 2
 texture = ExtResource("2_5lga2")
 expand_mode = 1
 stretch_mode = 6
+metadata/_edit_lock_ = true
 
 [node name="Grass" parent="." instance=ExtResource("4_yo0vf")]
 
 [node name="Nest" type="Node2D" parent="."]
 position = Vector2(40, -8)
 
+[node name="Coop" type="Sprite2D" parent="."]
+position = Vector2(184, -88)
+texture = ExtResource("4_16ab6")
+
 [node name="EggTimer" parent="." instance=ExtResource("4_8cmid")]
 z_index = 1
 position = Vector2(-200, 96)
-time = 5
-autostart = false
-
-[node name="Line2D" type="Line2D" parent="."]
-points = PackedVector2Array(0, 136, 0, -136)
-width = 1.0
-
-[node name="Line2D2" type="Line2D" parent="."]
-points = PackedVector2Array(-240, 0, 240, 0)
-width = 1.0
 
 [node name="ui" type="CanvasLayer" parent="."]
+layer = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ui"]
-anchors_preset = -1
-anchor_left = -0.161
-anchor_top = -0.158
-anchor_right = -0.117
-anchor_bottom = 0.069
-offset_left = -0.159973
-offset_top = -0.0199966
-offset_right = 0.480011
-offset_bottom = 0.109997
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
+[node name="Dialog" type="Window" parent="ui"]
+transparent_bg = true
+canvas_item_default_texture_filter = 0
+position = Vector2i(320, 180)
+size = Vector2i(800, 360)
+mode = 3
+visible = false
+wrap_controls = true
+transient = true
+unresizable = true
+borderless = true
+transparent = true
 theme = ExtResource("5_45ks5")
 
-[node name="Stage" type="Label" parent="ui/VBoxContainer"]
+[node name="ColorRect" type="ColorRect" parent="ui/Dialog"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.223529, 0.203922, 0.341176, 0.784314)
+
+[node name="MarginContainer" type="MarginContainer" parent="ui/Dialog"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/margin_left = 64
+theme_override_constants/margin_top = 64
+theme_override_constants/margin_right = 64
+theme_override_constants/margin_bottom = 64
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ui/Dialog/MarginContainer"]
 layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 64
+alignment = 1
+
+[node name="Label" type="Label" parent="ui/Dialog/MarginContainer/VBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/font_size = 64
+text = "OH no, time's up!
+the chics have ran away!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ui/Dialog/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 64
+
+[node name="cancel" type="Button" parent="ui/Dialog/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("5_45ks5")
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 48
+text = "exit level"
+
+[node name="ok" type="Button" parent="ui/Dialog/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("5_45ks5")
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 48
+text = "try again"
+
+[node name="MarginContainer" type="MarginContainer" parent="ui"]
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 208.0
+grow_vertical = 2
+size_flags_horizontal = 2
+size_flags_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ui/MarginContainer"]
+layout_mode = 2
+theme = ExtResource("5_45ks5")
+
+[node name="Stage" type="Label" parent="ui/MarginContainer/VBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+theme = ExtResource("5_45ks5")
+theme_override_colors/font_outline_color = Color(0.223529, 0.203922, 0.341176, 1)
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 48
 text = "stage: 20"

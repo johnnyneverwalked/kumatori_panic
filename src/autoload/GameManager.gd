@@ -45,6 +45,8 @@ var time_scale: float = 1: set = set_time_scale
 var cam: Camera2D
 
 func _ready():
+	SoundController.set_music_volume(0)
+	SoundController.set_sound_volume(0)
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	
 	var pause_node = load("res://src/pause.tscn")

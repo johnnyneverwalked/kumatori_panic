@@ -47,7 +47,7 @@ func _ready():
 	hand_R.material.set_shader_parameter("outline_color", GameManager.chic_outline_color)
 	
 	# set default hand placement positions and rotations
-#	HAND_POSITIONS[Vector2.ZERO] = {pos = Vector2.ZERO * GameManager.PIXEL_UNIT / 2, rot = 90}
+	HAND_POSITIONS[Vector2.ZERO] = {pos = Vector2.ZERO * GameManager.PIXEL_UNIT / 2, rot = 0}
 	HAND_POSITIONS[Vector2.UP] = {pos = Vector2.UP * GameManager.PIXEL_UNIT, rot = 0}
 	HAND_POSITIONS[Vector2.DOWN] = {pos = Vector2.DOWN * GameManager.PIXEL_UNIT / 2, rot = 180}
 	HAND_POSITIONS[Vector2.LEFT] = {pos = Vector2.LEFT * GameManager.PIXEL_UNIT / 2, rot = 90}
@@ -71,13 +71,16 @@ func _ready():
 		unlock.emit()
 	)
 	
-	GameManager.game_over.connect(func(won: bool):
+	GameManager.game_over.connect(func(_won: bool):
+		set_hands_position(Vector2.ZERO if _won else Vector2.DOWN)
 		locked = true
 		lock_timer.stop()
 		if chic:
 			holding.remove_child(chic)
 			place_chic.emit(chic)
 			chic.global_position = holding.global_position
+		
+		body.play("happy" if _won else "sad")
 	)
 	
 	var tween = get_tree().create_tween().set_loops().bind_node(self)\
@@ -144,7 +147,7 @@ func set_hands_position(pos: Vector2 = Vector2.ZERO):
 	
 	# "turn around" paws based on orientation
 	hands.scale.x = (-1 if pos == Vector2.LEFT else 1) * abs(scale.y)
-	hand_L.material.set_shader_parameter("fill_color", Color.WHITE if pos == Vector2.DOWN else GameManager.bear_colors.skin_light)
+	hand_L.material.set_shader_parameter("fill_color", Color.WHITE if pos == Vector2.DOWN or pos == Vector2.ZERO else GameManager.bear_colors.skin_light)
 	holding.z_index = 1 if pos == Vector2.DOWN else 0
 	
 	# set chicken detector to the correct position
