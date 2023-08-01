@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://bryb7x361jham"
+path="res://.godot/imported/JDSherbert - Nostalgia Music Pack - Saturday Morning Cartoons.ogg-744185bde3d8c5b390906f449f32fb62.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/audio/bgm/JDSherbert - Nostalgia Music Pack - Saturday Morning Cartoons.ogg"
+dest_files=["res://.godot/imported/JDSherbert - Nostalgia Music Pack - Saturday Morning Cartoons.ogg-744185bde3d8c5b390906f449f32fb62.oggvorbisstr"]
+
+[params]
+
+loop=true
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

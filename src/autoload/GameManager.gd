@@ -8,6 +8,7 @@ const sfx: Dictionary = {
 	rooster = preload("res://assets/audio/sfx/rooster.ogg"),
 	pause = preload("res://assets/audio/sfx/pause.ogg"),
 	block = preload("res://assets/audio/sfx/Block Break 1.ogg"),
+	explosion = preload("res://assets/audio/sfx/explosion1.ogg"),
 	collect = preload("res://assets/audio/sfx/Big Egg collect 1.ogg"),
 	clock_tick = preload("res://assets/audio/sfx/clock_tick.ogg"),
 	chic_jump = preload("res://assets/audio/sfx/Jump 1.ogg"),
@@ -15,7 +16,9 @@ const sfx: Dictionary = {
 	chic_jump_looped = preload("res://assets/audio/sfx/Jump looped.ogg"),
 }
 const bgm: Dictionary = {
-	main = preload("res://assets/audio/bgm/level_jingle.ogg")
+	main = preload("res://assets/audio/bgm/level_jingle.ogg"),
+	main2 = preload("res://assets/audio/bgm/JDSherbert - Minigame Music Pack - Beach Vibes.ogg"),
+	menu = preload("res://assets/audio/bgm/JDSherbert - Nostalgia Music Pack - Saturday Morning Cartoons.ogg")
 }
 
 enum Colors {WHITE, YELLOW, RED, BLUE, PINK, GREEN }
@@ -43,13 +46,14 @@ const chic_outline_color: Color = Color("#393457")
 
 var time_scale: float = 1: set = set_time_scale
 var cam: Camera2D
+var can_pause: bool = true
 
 func _ready():
-	SoundController.set_music_volume(0)
-	SoundController.set_sound_volume(0)
+	SoundController.set_music_volume(1)
+	SoundController.set_sound_volume(1)
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	
-	var pause_node = load("res://src/pause.tscn")
+	var pause_node = load("res://src/ui/Pause/pause.tscn")
 	add_sibling.call_deferred(pause_node.instantiate())
 	
 	cam = Camera2D.new()
@@ -67,7 +71,7 @@ func _notification(what):
 			get_tree().quit() # default behavior
 	
 func _unhandled_input(event):
-	if event.is_action("ui_cancel") and not get_tree().paused:
+	if event.is_action("ui_cancel") and not get_tree().paused and can_pause:
 		SoundController.play_sound(sfx.pause)
 		get_tree().paused = true
 

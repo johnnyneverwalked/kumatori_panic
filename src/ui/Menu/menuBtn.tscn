@@ -1,0 +1,69 @@
+[gd_scene load_steps=7 format=3 uid="uid://buedrwi81qonb"]
+
+[ext_resource type="FontFile" uid="uid://dnb6fpkbjrcy" path="res://assets/ui/fonts/ThaleahFat.ttf" id="1_jecih"]
+[ext_resource type="StyleBox" uid="uid://d5bq8a75wxb3" path="res://src/resources/menuBtnNormal.tres" id="2_rfi0y"]
+[ext_resource type="Script" path="res://src/ui/Menu/menuBtn.gd" id="3_ebv5x"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rk0q5"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_laio8"]
+bg_color = Color(0, 0, 0, 1)
+skew = Vector2(1, 0)
+expand_margin_right = 32.0
+shadow_color = Color(0, 0, 0, 1)
+shadow_size = 1
+shadow_offset = Vector2(4, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1570p"]
+bg_color = Color(0.968627, 0.894118, 0.462745, 1)
+skew = Vector2(1, 0)
+expand_margin_right = 32.0
+shadow_color = Color(0, 0, 0, 1)
+shadow_size = 1
+shadow_offset = Vector2(4, 4)
+
+[node name="Btn" type="Button"]
+texture_filter = 1
+anchors_preset = -1
+anchor_left = -0.044
+anchor_right = -0.044
+offset_left = -0.639996
+offset_right = 207.36
+offset_bottom = 52.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0.968627, 0.894118, 0.462745, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("1_jecih")
+theme_override_font_sizes/font_size = 48
+theme_override_styles/normal = ExtResource("2_rfi0y")
+theme_override_styles/hover = ExtResource("2_rfi0y")
+theme_override_styles/pressed = ExtResource("2_rfi0y")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_rk0q5")
+text = "PLAY"
+alignment = 2
+script = ExtResource("3_ebv5x")
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+z_index = -1
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_laio8")
+theme_override_styles/fill = SubResource("StyleBoxFlat_1570p")
+show_percentage = false
+metadata/_edit_lock_ = true
+
+[connection signal="button_down" from="." to="." method="_on_button_down"]
+[connection signal="button_up" from="." to="." method="_on_button_up"]
+[connection signal="focus_entered" from="." to="." method="_on_focus_entered"]
+[connection signal="focus_exited" from="." to="." method="_on_focus_exited"]
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_focus_exited"]

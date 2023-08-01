@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://cuh0od5eq4ao1"
+path="res://.godot/imported/JDSherbert - Minigame Music Pack - Beach Vibes.ogg-8facb3d9d8147e635959ed2389791483.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/audio/bgm/JDSherbert - Minigame Music Pack - Beach Vibes.ogg"
+dest_files=["res://.godot/imported/JDSherbert - Minigame Music Pack - Beach Vibes.ogg-8facb3d9d8147e635959ed2389791483.oggvorbisstr"]
+
+[params]
+
+loop=true
+loop_offset=0.0
+bpm=0.0
+beat_count=0
+bar_beats=4

@@ -1,15 +1,15 @@
 [gd_scene load_steps=4 format=3 uid="uid://cpjeiyn0pyu5x"]
 
-[ext_resource type="Script" path="res://src/pause.gd" id="1_2qr7q"]
-[ext_resource type="PackedScene" uid="uid://c13ku2nlnxwbi" path="res://src/ui/PauseOverlay/pause_overlay.tscn" id="2_6i1ph"]
-[ext_resource type="Theme" uid="uid://dd2gdeigo2urf" path="res://src/resources/main_theme.tres" id="2_obxdd"]
+[ext_resource type="Script" path="res://src/ui/Pause/pause.gd" id="1_s36a6"]
+[ext_resource type="PackedScene" uid="uid://c13ku2nlnxwbi" path="res://src/ui/PauseOverlay/pause_overlay.tscn" id="2_8stmg"]
+[ext_resource type="Theme" uid="uid://dd2gdeigo2urf" path="res://src/resources/main_theme.tres" id="3_a2j3u"]
 
 [node name="Pause" type="CanvasLayer"]
 process_mode = 2
 visible = false
-script = ExtResource("1_2qr7q")
+script = ExtResource("1_s36a6")
 
-[node name="PauseOverlay" parent="." instance=ExtResource("2_6i1ph")]
+[node name="PauseOverlay" parent="." instance=ExtResource("2_8stmg")]
 
 [node name="MenuContainer" type="VBoxContainer" parent="PauseOverlay"]
 layout_mode = 1
@@ -27,22 +27,23 @@ theme_override_constants/separation = 16
 
 [node name="Play" type="Button" parent="PauseOverlay/MenuContainer"]
 layout_mode = 2
-theme = ExtResource("2_obxdd")
+theme = ExtResource("3_a2j3u")
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 16
 theme_override_font_sizes/font_size = 64
 text = "continue"
 
-[node name="HowTo" type="Button" parent="PauseOverlay/MenuContainer"]
+[node name="Settings" type="Button" parent="PauseOverlay/MenuContainer"]
 layout_mode = 2
-theme = ExtResource("2_obxdd")
+theme = ExtResource("3_a2j3u")
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 16
 theme_override_font_sizes/font_size = 64
+text = "Settings"
 
 [node name="MainMenu" type="Button" parent="PauseOverlay/MenuContainer"]
 layout_mode = 2
-theme = ExtResource("2_obxdd")
+theme = ExtResource("3_a2j3u")
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 16
 theme_override_font_sizes/font_size = 64
@@ -50,11 +51,12 @@ text = "main menu"
 
 [node name="Exit" type="Button" parent="PauseOverlay/MenuContainer"]
 layout_mode = 2
-theme = ExtResource("2_obxdd")
+theme = ExtResource("3_a2j3u")
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 16
 theme_override_font_sizes/font_size = 64
 text = "quit"
 
 [connection signal="button_up" from="PauseOverlay/MenuContainer/Play" to="." method="_on_play_button_up"]
+[connection signal="button_up" from="PauseOverlay/MenuContainer/MainMenu" to="." method="_on_main_menu_button_up"]
 [connection signal="button_up" from="PauseOverlay/MenuContainer/Exit" to="." method="_on_exit_button_up"]

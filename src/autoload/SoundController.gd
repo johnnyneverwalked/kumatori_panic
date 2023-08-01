@@ -22,7 +22,7 @@ func _ready():
 	add_child(bgmPlayer)
 	add_child(sfxPlayer)
 	
-	sfxPlayer.connect("finished", self._on_sound_finished)
+	sfxPlayer.finished.connect(_on_sound_finished)
 
 func play_sound(sfx: AudioStream, clear: bool = true): _play(sfxPlayer, sfx, clear)
 func play_music(bgm: AudioStream = null, clear: bool = true): _play(bgmPlayer, bgm, clear)

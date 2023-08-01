@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://src/game.gd" id="1_61h8o"]
 [ext_resource type="Texture2D" uid="uid://b2rvs821tidmp" path="res://assets/sprites/allbackgroundstars.png" id="2_5lga2"]
 [ext_resource type="PackedScene" uid="uid://cfnpgolpb33o2" path="res://src/game/EggTimer/egg_timer.tscn" id="4_8cmid"]
-[ext_resource type="Texture2D" uid="uid://b8lr2cuhdpjke" path="res://assets/sprites/crosshair113.png" id="4_16ab6"]
+[ext_resource type="PackedScene" uid="uid://btpqjq87w544g" path="res://src/game/Coop/coop.tscn" id="4_y3jmo"]
 [ext_resource type="PackedScene" uid="uid://px8uey4vnmw4" path="res://src/game/Grass/tile_map.tscn" id="4_yo0vf"]
 [ext_resource type="Theme" uid="uid://dd2gdeigo2urf" path="res://src/resources/main_theme.tres" id="5_45ks5"]
 
@@ -31,13 +31,14 @@ metadata/_edit_lock_ = true
 [node name="Nest" type="Node2D" parent="."]
 position = Vector2(40, -8)
 
-[node name="Coop" type="Sprite2D" parent="."]
-position = Vector2(184, -88)
-texture = ExtResource("4_16ab6")
+[node name="Coop" parent="." instance=ExtResource("4_y3jmo")]
+position = Vector2(184, -96)
 
 [node name="EggTimer" parent="." instance=ExtResource("4_8cmid")]
 z_index = 1
 position = Vector2(-200, 96)
+time = 15
+autostart = false
 
 [node name="ui" type="CanvasLayer" parent="."]
 layer = 0
@@ -45,9 +46,9 @@ layer = 0
 [node name="Dialog" type="Window" parent="ui"]
 transparent_bg = true
 canvas_item_default_texture_filter = 0
+mode = 3
 position = Vector2i(320, 180)
 size = Vector2i(800, 360)
-mode = 3
 visible = false
 wrap_controls = true
 transient = true

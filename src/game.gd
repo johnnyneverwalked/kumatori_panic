@@ -15,7 +15,7 @@ var grid:= Vector2.ZERO
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	SoundController.play_music(GameManager.bgm.main)
+	SoundController.play_music(GameManager.bgm.main2)
 	randomize()
 	var tween = get_tree().create_tween().set_loops()\
 	.set_trans(Tween.TRANS_SINE)\
@@ -132,8 +132,9 @@ func gather_chics():
 		chic.scale.x = -1
 		chic.z_index = 3
 		chic.z_as_relative = false
-		tween.tween_property(chic, "global_position", $Coop.global_position, 1).set_delay(.05 * i)
-		tween.tween_property(chic, "scale", Vector2.ZERO, .5).set_delay(.5 + .05 * i)
+		tween.tween_property(chic, "global_position", $Coop.global_position + Vector2.DOWN * GameManager.PIXEL_UNIT * 1.25, 1).set_delay(.05 * i)
+		tween.tween_property(chic.shadow, "visible", false, 0).set_delay(.05 * i)
+		tween.tween_property(chic, "scale", Vector2.ZERO, .75).set_delay(.5 + .05 * i)
 
 		i += 1
 	tween.play()
@@ -155,8 +156,9 @@ func leave_chics():
 		chic.z_index = 3
 		chic.z_as_relative = false
 		tween.tween_property(chic, "global_position:x", dir * randi_range(0, screen_coords.x * 2) / 2, 1.5)
+		tween.tween_property(chic.shadow, "visible", false, 0)
 		tween.tween_property(chic, "global_position:y", -screen_coords.y, 1.5)
-	tween.finished.connect(func(): show_win_lose_dialog(true))
+	tween.finished.connect(func(): show_win_lose_dialog(false))
 
 func check_board():
 	# the total found color groups in the map
@@ -196,7 +198,8 @@ func check_board():
 			break
 
 	# If all the chics are on the ground and all same colored ones are grouped together we win
-	var winning: bool = groups == colors.size()
+	if groups == colors.size():
+		GameManager.game_over.emit(true)
 
 func show_win_lose_dialog(won: bool):
 	var dialog: Window = $ui/Dialog

@@ -16,7 +16,7 @@ signal unlock
 @onready var pickupDetector: Node2D = $PickupDetector
 @onready var lock_timer: Timer = $LockTimer
 @onready var indicator: Sprite2D = $Indicator
-@onready var indicator_inner: Sprite2D = $Indicator/IndicatorInner
+
 @onready var sweat: GPUParticles2D = $Sweat
 
 const PICKUP_SPEED = .2
@@ -30,6 +30,7 @@ var pd: Dictionary = {
 
 var locked: bool
 var moving: bool
+var original_chic_scale: Vector2 = Vector2.ONE
 var bounds: Rect2
 var hands_position: Vector2 = Vector2.UP: set = set_hands_position
 
@@ -53,7 +54,7 @@ func _ready():
 	HAND_POSITIONS[Vector2.LEFT] = {pos = Vector2.LEFT * GameManager.PIXEL_UNIT / 2, rot = 90}
 	HAND_POSITIONS[Vector2.RIGHT] = {pos = Vector2.RIGHT * GameManager.PIXEL_UNIT / 2, rot = 90}
 	
-	hands_position = Vector2.LEFT
+	hands_position = Vector2.RIGHT
 	
 	body.scale = Vector2.ZERO
 	get_tree().create_tween()\
@@ -90,6 +91,8 @@ func _ready():
 	
 	tween.tween_property(indicator, "scale", indicator.scale * 1.2, .5)
 	tween.tween_property(indicator, "scale", indicator.scale, .5)
+	
+	demo = demo
 
 
 func _input(_event):
@@ -106,8 +109,6 @@ func _input(_event):
 func _process(delta):
 	if demo:
 		return
-		
-	indicator_inner.visible = Input.is_action_pressed("hold")
 	
 	move(Input.get_vector("move_left", "move_right", "move_up", "move_down").round())
 	
@@ -146,13 +147,13 @@ func set_hands_position(pos: Vector2 = Vector2.ZERO):
 	hand_R.rotation_degrees =  HAND_POSITIONS.get(pos).rot
 	
 	# "turn around" paws based on orientation
-	hands.scale.x = (-1 if pos == Vector2.LEFT else 1) * abs(scale.y)
+	hands.scale.x = (-1 if pos == Vector2.LEFT else 1) * abs(body.scale.y)
 	hand_L.material.set_shader_parameter("fill_color", Color.WHITE if pos == Vector2.DOWN or pos == Vector2.ZERO else GameManager.bear_colors.skin_light)
 	holding.z_index = 1 if pos == Vector2.DOWN else 0
 	
 	# set chicken detector to the correct position
 #	pd.position = pos * GameManager.PIXEL_UNIT * 2
-	indicator.visible = pos != Vector2.ZERO
+	indicator.visible = pos != Vector2.ZERO and not demo
 #	lock(PICKUP_SPEED / 2)
 	
 	
@@ -174,7 +175,7 @@ func move(dir: Vector2 = Vector2.ZERO):
 	pd[dir].position = dir * GameManager.PIXEL_UNIT * 2
 	if pd[dir].has_overlapping_bodies() and pd[dir].get_overlapping_bodies()[0] is Chic:
 		var target_chic = pd[dir].get_overlapping_bodies()[0]
-		if Input.is_action_pressed("hold") and chic:
+		if not Input.is_action_pressed("hold") and chic:
 			get_tree().create_tween()\
 				.tween_property(target_chic, "global_position", global_position, PICKUP_SPEED)\
 				.set_trans(Tween.TRANS_CIRC)\
@@ -209,13 +210,17 @@ func set_held_chic(_chic: Chic):
 	# add new chic to our hands
 	chic.get_parent().remove_child(chic)
 	holding.add_child(chic)
-	SoundController.play_sound(GameManager.sfx.chic_jump)
+	if not demo:
+		SoundController.play_sound(GameManager.sfx.chic_jump)
 	
 	# prevent janky movement due to node2D swapping
 	chic.global_position = global_position if moving else pd[hands_position].global_position
 	chic.z_as_relative = true
 	chic.z_index = 0
 	chic.collision_layer = 1
+	chic.shadow.visible = false
+	original_chic_scale = chic.scale
+	chic.scale /= scale
 	
 	get_tree().create_tween()\
 		.tween_property(chic, "position", Vector2.ZERO, PICKUP_SPEED)\
@@ -240,6 +245,8 @@ func place_chic_back(pos: Vector2):
 	chic.collision_layer = 2
 	chic.z_as_relative = false
 	chic.z_index = 2
+	chic.shadow.visible = true
+	chic.scale = original_chic_scale
 	
 	var tween = get_tree().create_tween()
 	tween.tween_property(chic, "global_position", pos, PICKUP_SPEED)\
@@ -257,9 +264,10 @@ func place_chic_back(pos: Vector2):
 	lock(PICKUP_SPEED)
 
 func is_out_of_bounds(pos: Vector2):
-	return bounds == null or pos == null or not bounds.has_point(pos)
+	return not demo and (bounds == null or pos == null or not bounds.has_point(pos))
 
 func set_demo(_demo: bool):
 	demo = _demo
-	indicator.visible = indicator.visible and not demo
+	if indicator != null:
+		indicator.visible = indicator.visible and not demo
 	

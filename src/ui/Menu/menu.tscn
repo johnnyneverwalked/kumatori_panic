@@ -1,0 +1,302 @@
+[gd_scene load_steps=11 format=3 uid="uid://dwhofntsmm6y1"]
+
+[ext_resource type="Script" path="res://Menu.gd" id="1_msvty"]
+[ext_resource type="Shader" path="res://src/shaders/dots.gdshader" id="2_pjbtg"]
+[ext_resource type="PackedScene" uid="uid://bnx4kbj5rc2jw" path="res://src/game/Bear/bear.tscn" id="3_y4bdm"]
+[ext_resource type="PackedScene" uid="uid://cmj5bxlgfxs6k" path="res://src/game/Chic/chic.tscn" id="4_nkxen"]
+[ext_resource type="Shader" path="res://src/shaders/outline.gdshader" id="5_28cuh"]
+[ext_resource type="Texture2D" uid="uid://crayhf33rq5kg" path="res://assets/sprites/logo.png" id="5_q5vux"]
+[ext_resource type="Theme" uid="uid://dd2gdeigo2urf" path="res://src/resources/main_theme.tres" id="7_e6axl"]
+[ext_resource type="PackedScene" uid="uid://buedrwi81qonb" path="res://src/ui/Menu/menuBtn.tscn" id="7_q8y3s"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7bqqk"]
+shader = ExtResource("2_pjbtg")
+shader_parameter/Speed = 1.0
+shader_parameter/Intensity = 1.75
+shader_parameter/Hardness = 500.0
+shader_parameter/Scale = Vector2(1.25, 1)
+shader_parameter/RotationSpeed = 0.5
+shader_parameter/Color = Color(0.94902, 0.858824, 0.329412, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_satfp"]
+shader = ExtResource("5_28cuh")
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/fill_color = Color(1, 1, 1, 1)
+shader_parameter/swap_color = Color(1, 1, 1, 1)
+shader_parameter/width = 2.0
+shader_parameter/shadow_threshold = 80.0
+shader_parameter/pattern = 0
+shader_parameter/blink_interval = 1.0
+shader_parameter/can_blink = false
+shader_parameter/inside = false
+shader_parameter/add_margins = true
+
+[node name="Menu" type="Control"]
+layout_mode = 3
+anchor_left = -0.167
+anchor_top = -0.168
+anchor_right = 0.178
+anchor_bottom = 0.168
+offset_left = 0.480011
+offset_top = 0.0800171
+offset_right = -0.320007
+offset_bottom = -0.0800171
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_msvty")
+
+[node name="Bg" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Dots" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_7bqqk")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = 3.05176e-05
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Chics" type="Node2D" parent="."]
+
+[node name="Chic" parent="Chics" instance=ExtResource("4_nkxen")]
+position = Vector2(288, 176)
+scale = Vector2(2, 2)
+shadowed = false
+
+[node name="Chic7" parent="Chics" instance=ExtResource("4_nkxen")]
+position = Vector2(424, 144)
+scale = Vector2(2, 2)
+color = 3
+shadowed = false
+
+[node name="Chic8" parent="Chics" instance=ExtResource("4_nkxen")]
+position = Vector2(360, 176)
+scale = Vector2(2, 2)
+color = 3
+shadowed = false
+
+[node name="Chic9" parent="Chics" instance=ExtResource("4_nkxen")]
+position = Vector2(392, 176)
+scale = Vector2(2, 2)
+color = 2
+shadowed = false
+
+[node name="Chic10" parent="Chics" instance=ExtResource("4_nkxen")]
+position = Vector2(424, 176)
+scale = Vector2(2, 2)
+color = 1
+shadowed = false
+
+[node name="Chic11" parent="Chics" instance=ExtResource("4_nkxen")]
+position = Vector2(360, 144)
+scale = Vector2(2, 2)
+color = 4
+shadowed = false
+
+[node name="Chic12" parent="Chics" instance=ExtResource("4_nkxen")]
+position = Vector2(392, 208)
+scale = Vector2(2, 2)
+color = 1
+shadowed = false
+
+[node name="Chic13" parent="Chics" instance=ExtResource("4_nkxen")]
+position = Vector2(424, 208)
+scale = Vector2(2, 2)
+color = 2
+shadowed = false
+
+[node name="Chic14" parent="Chics" instance=ExtResource("4_nkxen")]
+position = Vector2(360, 208)
+scale = Vector2(2, 2)
+color = 3
+shadowed = false
+
+[node name="Chic15" parent="Chics" instance=ExtResource("4_nkxen")]
+position = Vector2(328, 208)
+scale = Vector2(2, 2)
+color = 3
+shadowed = false
+
+[node name="Chic16" parent="Chics" instance=ExtResource("4_nkxen")]
+position = Vector2(392, 144)
+scale = Vector2(2, 2)
+color = 5
+shadowed = false
+
+[node name="Chic17" parent="Chics" instance=ExtResource("4_nkxen")]
+position = Vector2(424, 112)
+scale = Vector2(2, 2)
+color = 3
+shadowed = false
+
+[node name="Chic18" parent="Chics" instance=ExtResource("4_nkxen")]
+position = Vector2(456, 208)
+scale = Vector2(2, 2)
+color = 1
+shadowed = false
+
+[node name="Chic2" parent="Chics" instance=ExtResource("4_nkxen")]
+position = Vector2(328, 240)
+scale = Vector2(2, 2)
+color = 2
+shadowed = false
+
+[node name="Chic3" parent="Chics" instance=ExtResource("4_nkxen")]
+position = Vector2(360, 240)
+scale = Vector2(2, 2)
+color = 5
+shadowed = false
+
+[node name="Chic4" parent="Chics" instance=ExtResource("4_nkxen")]
+position = Vector2(392, 240)
+scale = Vector2(2, 2)
+color = 1
+shadowed = false
+
+[node name="Chic5" parent="Chics" instance=ExtResource("4_nkxen")]
+position = Vector2(424, 240)
+scale = Vector2(2, 2)
+color = 4
+shadowed = false
+
+[node name="Chic6" parent="Chics" instance=ExtResource("4_nkxen")]
+position = Vector2(456, 240)
+scale = Vector2(2, 2)
+color = 5
+shadowed = false
+
+[node name="Bear" parent="." instance=ExtResource("3_y4bdm")]
+position = Vector2(216, 208)
+scale = Vector2(4, 4)
+demo = true
+
+[node name="Logo" type="Sprite2D" parent="."]
+z_index = 2
+texture_filter = 1
+material = SubResource("ShaderMaterial_satfp")
+position = Vector2(64, 64)
+scale = Vector2(3, 3)
+texture = ExtResource("5_q5vux")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 0
+
+[node name="Version" type="Label" parent="CanvasLayer"]
+texture_filter = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -135.0
+offset_top = -18.0
+grow_horizontal = 0
+grow_vertical = 0
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme = ExtResource("7_e6axl")
+theme_override_colors/font_color = Color(0.968627, 0.894118, 0.462745, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+text = "ver. 0.1 "
+horizontal_alignment = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = -96
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 32
+metadata/_edit_lock_ = true
+
+[node name="Controls" type="VBoxContainer" parent="CanvasLayer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+
+[node name="Play" parent="CanvasLayer/MarginContainer/Controls" instance=ExtResource("7_q8y3s")]
+layout_mode = 2
+
+[node name="ZenMode" parent="CanvasLayer/MarginContainer/Controls" instance=ExtResource("7_q8y3s")]
+layout_mode = 2
+text = "Zen mode"
+
+[node name="HowTo" parent="CanvasLayer/MarginContainer/Controls" instance=ExtResource("7_q8y3s")]
+layout_mode = 2
+text = "Tutorial"
+
+[node name="Settings" parent="CanvasLayer/MarginContainer/Controls" instance=ExtResource("7_q8y3s")]
+layout_mode = 2
+text = "Settings
+"
+
+[node name="Credits" parent="CanvasLayer/MarginContainer/Controls" instance=ExtResource("7_q8y3s")]
+layout_mode = 2
+text = "Credits
+"
+
+[node name="Quit" parent="CanvasLayer/MarginContainer/Controls" instance=ExtResource("7_q8y3s")]
+layout_mode = 2
+text = "Quit
+"
+
+[node name="Labels" type="VBoxContainer" parent="CanvasLayer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+
+[node name="Label" type="Label" parent="CanvasLayer/MarginContainer/Labels"]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 8
+theme = ExtResource("7_e6axl")
+theme_override_colors/font_color = Color(0.968627, 0.894118, 0.462745, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+text = "JohnnyNeverWalked"
+horizontal_alignment = 2
+
+[node name="Label2" type="Label" parent="CanvasLayer/MarginContainer/Labels"]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 8
+theme = ExtResource("7_e6axl")
+theme_override_colors/font_color = Color(0.968627, 0.894118, 0.462745, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+text = "Eat sleep meep!"
+horizontal_alignment = 2
+
+[node name="Label3" type="Label" parent="CanvasLayer/MarginContainer/Labels"]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 8
+theme = ExtResource("7_e6axl")
+theme_override_colors/font_color = Color(0.968627, 0.894118, 0.462745, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+text = "A game by its cover
+2023"
+horizontal_alignment = 2
+
+[connection signal="pressed" from="CanvasLayer/MarginContainer/Controls/Play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="CanvasLayer/MarginContainer/Controls/ZenMode" to="." method="_on_zen_mode_pressed"]
+[connection signal="pressed" from="CanvasLayer/MarginContainer/Controls/HowTo" to="." method="_on_how_to_pressed"]
+[connection signal="pressed" from="CanvasLayer/MarginContainer/Controls/Settings" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="CanvasLayer/MarginContainer/Controls/Credits" to="." method="_on_credits_pressed"]
+[connection signal="pressed" from="CanvasLayer/MarginContainer/Controls/Quit" to="." method="_on_quit_pressed"]

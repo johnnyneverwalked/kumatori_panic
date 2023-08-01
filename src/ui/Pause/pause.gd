@@ -1,7 +1,7 @@
 extends CanvasLayer
 
 @onready var play_btn: Button = $PauseOverlay/MenuContainer/Play
-@onready var how_to_btn: Button = $PauseOverlay/MenuContainer/HowTo
+@onready var settings_btn: Button = $PauseOverlay/MenuContainer/Settings
 @onready var main_menu_btn: Button = $PauseOverlay/MenuContainer/MainMenu
 @onready var exit_btn: Button = $PauseOverlay/MenuContainer/Exit
 
@@ -38,3 +38,10 @@ func _on_play_button_up():
 
 func _on_exit_button_up():
 	GameManager.notification(NOTIFICATION_WM_CLOSE_REQUEST)
+
+
+func _on_main_menu_button_up():
+	unpause()
+	await get_tree().create_timer(.25).timeout
+	SoundController.bgmPlayer.stop()
+	get_tree().change_scene_to_packed(load("res://src/ui/Menu/menu.tscn"))

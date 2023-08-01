@@ -41,6 +41,7 @@ func _ready():
 		new_chic.color = randi_range(0, GameManager.Colors.size() - 1)
 		await get_tree().create_timer(.001).timeout
 		chics.add_child(new_chic)
+		new_chic.shadow.visible = false
 		new_chic.sprite.play("walk")
 		new_chic.animation.play("walk") if randi() % 2 else new_chic.animation.play_backwards("walk")
 		new_chic.sprite.speed_scale = 2
@@ -84,5 +85,5 @@ func fade_out():
 	tween.finished.connect(func(): 
 		SoundController.clean_players()
 		await get_tree().create_timer(.1).timeout
-		get_tree().change_scene_to_packed(load("res://src/game.tscn"))
+		get_tree().change_scene_to_packed(load("res://src/ui/Menu/menu.tscn"))
 	)
