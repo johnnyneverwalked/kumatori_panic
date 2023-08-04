@@ -108,3 +108,42 @@ func flood_fill(color_map: Dictionary = {}, start: Vector2 = Vector2.ZERO, targe
 				queue.append(n)
 
 	return color_map
+
+func is_winning_board(grass: TileMap, nest: Node2D):
+	# the total found color groups in the map
+	var groups: int = 0
+	
+	# the colors based on chic positions
+	var color_map: Dictionary = {}
+	
+	# the total unique chic colors
+	var colors: Array[int] = []
+	
+	# The number of chics in the map
+	var total_chics = grass.get_used_rect().size.x * grass.get_used_rect().size.y - 1
+	
+	for chic in nest.get_children():
+		color_map[Vector2(grass.local_to_map(grass.to_local(chic.global_position)))] = chic.color
+		if not colors.has(chic.color):
+			colors.append(chic.color)
+	
+	var check_pos: Vector2 = color_map.keys()[0]
+	
+	# check validity only if the bear is not holding a chic
+	var recheck: bool = total_chics == color_map.size()
+	while recheck:
+		color_map = GameManager.flood_fill(color_map, check_pos)
+
+		# every time we flood fill a color we increment groups 
+		groups += 1
+		recheck = false
+		
+		# only continue checking if there are unvisited positions
+		for pos in color_map.keys():
+			if color_map[pos] == -1:
+				continue
+			check_pos = pos
+			recheck = true
+			break
+	
+	return groups == colors.size()

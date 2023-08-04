@@ -1,0 +1,98 @@
+[gd_scene load_steps=4 format=3 uid="uid://c1w20s3g2487t"]
+
+[ext_resource type="Script" path="res://src/ui/Tutorial/tutorial.gd" id="1_rqdr7"]
+[ext_resource type="PackedScene" uid="uid://px8uey4vnmw4" path="res://src/game/Grass/tile_map.tscn" id="1_u4n11"]
+[ext_resource type="Theme" uid="uid://dd2gdeigo2urf" path="res://src/resources/main_theme.tres" id="3_7jgsy"]
+
+[node name="Tutorial" type="Node2D"]
+script = ExtResource("1_rqdr7")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Text" type="MarginContainer" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 128
+
+[node name="Label" type="RichTextLabel" parent="CanvasLayer/Text"]
+texture_filter = 1
+layout_mode = 2
+size_flags_vertical = 8
+theme = ExtResource("3_7jgsy")
+theme_override_colors/default_color = Color(0.968627, 0.894118, 0.462745, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/normal_font_size = 32
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+autowrap_mode = 2
+
+[node name="Controls" type="VBoxContainer" parent="CanvasLayer/Text"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+alignment = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/Text/Controls"]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 1
+theme = ExtResource("3_7jgsy")
+theme_override_colors/font_color = Color(0.968627, 0.894118, 0.462745, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 32
+text = "MOVE: [wasd]"
+horizontal_alignment = 2
+
+[node name="Label2" type="Label" parent="CanvasLayer/Text/Controls"]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 1
+theme = ExtResource("3_7jgsy")
+theme_override_colors/font_color = Color(0.968627, 0.894118, 0.462745, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 32
+text = "Look around: [arrows]"
+horizontal_alignment = 2
+
+[node name="Label3" type="Label" parent="CanvasLayer/Text/Controls"]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 1
+theme = ExtResource("3_7jgsy")
+theme_override_colors/font_color = Color(0.968627, 0.894118, 0.462745, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 32
+text = "PICKUP / place down: [space]"
+horizontal_alignment = 2
+
+[node name="Label4" type="Label" parent="CanvasLayer/Text/Controls"]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 1
+theme = ExtResource("3_7jgsy")
+theme_override_colors/font_color = Color(0.968627, 0.894118, 0.462745, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 32
+text = "Swap while moving: [shift (hold)]"
+horizontal_alignment = 2
+
+[node name="Grass" parent="." instance=ExtResource("1_u4n11")]
+
+[node name="Nest" type="Node2D" parent="."]

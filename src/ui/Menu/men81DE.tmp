@@ -210,11 +210,9 @@ position = Vector2(64, 64)
 scale = Vector2(3, 3)
 texture = ExtResource("6_6syhy")
 
-[node name="Tutorial" parent="." node_paths=PackedStringArray("back_btn") instance=ExtResource("7_um00g")]
-process_mode = 4
+[node name="Tutorial" parent="." instance=ExtResource("7_um00g")]
 visible = false
 position = Vector2(240, 136)
-back_btn = NodePath("../CanvasLayer/Back/Control/BackBtn")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -598,7 +596,6 @@ anchor_left = 0.0
 anchor_right = 0.0
 offset_left = 0.0
 offset_right = 256.0
-disabled = true
 text = "back"
 
 [connection signal="return_to_menu" from="Tutorial" to="." method="_on_back_btn_pressed"]

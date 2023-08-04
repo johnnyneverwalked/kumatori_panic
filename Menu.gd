@@ -4,47 +4,60 @@ extends Control
 @onready var bear: Bear = $Bear
 @onready var chic: Chic = $Chics/Chic
 @onready var logo: Sprite2D = $Logo
-@onready var labels: VBoxContainer = $CanvasLayer/MarginContainer/Labels
+@onready var labels: VBoxContainer = $CanvasLayer/Container/Labels
 @onready var nest: Node2D = $Chics
-@onready var controls: VBoxContainer = $CanvasLayer/MarginContainer/Controls
-@onready var container: MarginContainer = $CanvasLayer/MarginContainer
+@onready var controls: VBoxContainer = $CanvasLayer/Container/Controls
+@onready var back_btn_container: MarginContainer = $CanvasLayer/Back
+@onready var back_btn: Button = $CanvasLayer/Back/Control/BackBtn
+@onready var credits: VBoxContainer = $CanvasLayer/Credits
+@onready var tutorial: Node2D = $Tutorial
+@onready var container: MarginContainer = $CanvasLayer/Container
+
+var showing_credits: bool
+var credits_tween: Tween
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	GameManager.can_pause = false
+	$Dots.visible = true
 	bear.set_held_chic(chic)
 	bear.hand_L.position = Vector2(-5, 2)
 	bear.hand_R.position = Vector2(5, 2)
-
+	credits_tween = create_tween()
+	credits_tween.stop()
 	animate()
 
 
-func animate():
+func animate(skip_logo: bool = false):
 	var screen_coords = get_viewport_rect().size / GameManager.cam.zoom
-	logo.position = screen_coords / 2
-	logo.scale = Vector2.ZERO
 	bear.scale = Vector2.ZERO
 	nest.scale = Vector2.ZERO
 	container.scale = Vector2.ZERO
+	var start_tween: Tween
 	
-	await get_tree().create_timer(.5).timeout
-	var start_tween = create_tween().set_parallel().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN_OUT)
-	
-	start_tween.tween_property(logo, "scale", Vector2.ONE * 8, 1)
-	start_tween.tween_property(logo, "rotation_degrees", 360 * 5, 1)
-	
-	get_tree().create_timer(.5).timeout.connect(func(): SoundController.play_sound(GameManager.sfx.explosion))
-	await start_tween.finished
-	start_tween.kill()
-	
-	start_tween = create_tween().set_parallel().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
-	start_tween.tween_property(logo, "scale", Vector2.ONE * 3, 1).set_delay(.25)
-	start_tween.tween_property(logo, "position", Vector2.ONE * 64, 1).set_delay(.25)
-	
-	get_tree().create_timer(.25).timeout.connect(func(): SoundController.play_sound(GameManager.sfx.chic_jump))
-	await start_tween.finished
-	start_tween.kill()
-	
-	SoundController.play_music(GameManager.bgm.menu)
+	if not skip_logo:
+		logo.position = screen_coords / 2
+		logo.scale = Vector2.ZERO
+		
+		await get_tree().create_timer(.5).timeout
+		start_tween = create_tween().set_parallel().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN_OUT)
+		
+		start_tween.tween_property(logo, "scale", Vector2.ONE * 8, 1)
+		start_tween.tween_property(logo, "rotation_degrees", 360 * 5, 1)
+		
+		get_tree().create_timer(.5).timeout.connect(func(): SoundController.play_sound(GameManager.sfx.explosion))
+		await start_tween.finished
+		start_tween.kill()
+		
+		start_tween = create_tween().set_parallel().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
+		start_tween.tween_property(logo, "scale", Vector2.ONE * 3, 1).set_delay(.25)
+		start_tween.tween_property(logo, "position", Vector2.ONE * 64, 1).set_delay(.25)
+		
+		get_tree().create_timer(.25).timeout.connect(func(): SoundController.play_sound(GameManager.sfx.chic_jump))
+		await start_tween.finished
+		start_tween.kill()
+		
+		SoundController.play_music(GameManager.bgm.menu)
 	
 	start_tween = create_tween()
 	
@@ -78,6 +91,10 @@ func animate():
 
 func _unhandled_input(event):
 	if event.is_action_pressed("ui_down") or event.is_action_pressed("ui_up"):
+		if not (back_btn.disabled or back_btn.has_focus()):
+			back_btn.grab_focus()
+			return
+		
 		var is_focused: bool = false
 		var buttons: Array = controls.get_children()
 		for btn in buttons:
@@ -86,6 +103,9 @@ func _unhandled_input(event):
 				break
 		if not is_focused:
 			buttons[0].grab_focus()
+
+func show_credits():
+	pass
 
 func _on_quit_pressed():
 	GameManager.notification(NOTIFICATION_WM_CLOSE_REQUEST)
@@ -100,7 +120,17 @@ func _on_zen_mode_pressed():
 
 
 func _on_how_to_pressed():
-	pass # Replace with function body.
+	container.visible = false
+	logo.visible = false
+	bear.visible = false
+	nest.visible = false
+	$Dots.visible = false
+	
+	tutorial.process_mode = Node.PROCESS_MODE_ALWAYS
+	tutorial._ready()
+	tutorial.visible = true
+	back_btn_container.visible = true
+	back_btn.disabled = false
 
 
 func _on_settings_pressed():
@@ -108,4 +138,50 @@ func _on_settings_pressed():
 
 
 func _on_credits_pressed():
-	pass # Replace with function body.
+	container.visible = false
+	logo.visible = false
+	bear.visible = false
+	nest.visible = false
+	
+	credits.process_mode = Node.PROCESS_MODE_ALWAYS
+	var screen_coords = get_viewport_rect().size
+	credits.position.y = screen_coords.y
+	credits_tween.kill()
+	credits_tween = create_tween().set_trans(Tween.TRANS_LINEAR)
+	
+	credits_tween.tween_property(credits, "position:y", -credits.size.y - screen_coords.y / 2, 20)
+	credits_tween.finished.connect(func(): 
+		if showing_credits:
+			_on_back_btn_pressed()
+	)
+	
+	credits.visible = true
+	back_btn_container.visible = true
+	back_btn.disabled = false
+	showing_credits = true
+
+
+func _on_back_btn_pressed():
+	
+	# Credits
+	credits.visible = false
+	credits.process_mode = Node.PROCESS_MODE_DISABLED
+	showing_credits = false
+	credits_tween.stop()
+	
+	#Tutorial
+	
+	tutorial.visible = false
+	get_tree().create_timer(.1).timeout.connect(func(): tutorial.process_mode = Node.PROCESS_MODE_DISABLED)
+	
+	$Dots.visible = true
+	
+	#Menu
+	container.visible = true
+	logo.visible = true
+	bear.visible = true
+	nest.visible = true
+	back_btn_container.visible = false
+	back_btn.disabled = true
+	
+	animate(true)

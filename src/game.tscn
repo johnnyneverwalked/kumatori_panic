@@ -100,14 +100,6 @@ layout_mode = 2
 size_flags_horizontal = 4
 theme_override_constants/separation = 64
 
-[node name="cancel" type="Button" parent="ui/Dialog/MarginContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-theme = ExtResource("5_45ks5")
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 12
-theme_override_font_sizes/font_size = 48
-text = "exit level"
-
 [node name="ok" type="Button" parent="ui/Dialog/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 theme = ExtResource("5_45ks5")
@@ -115,6 +107,14 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 12
 theme_override_font_sizes/font_size = 48
 text = "try again"
+
+[node name="cancel" type="Button" parent="ui/Dialog/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("5_45ks5")
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 48
+text = "exit level"
 
 [node name="MarginContainer" type="MarginContainer" parent="ui"]
 anchors_preset = 9
@@ -138,3 +138,6 @@ theme_override_colors/font_outline_color = Color(0.223529, 0.203922, 0.341176, 1
 theme_override_constants/outline_size = 12
 theme_override_font_sizes/font_size = 48
 text = "stage: 20"
+
+[connection signal="pressed" from="ui/Dialog/MarginContainer/VBoxContainer/HBoxContainer/ok" to="." method="_on_ok_pressed"]
+[connection signal="pressed" from="ui/Dialog/MarginContainer/VBoxContainer/HBoxContainer/cancel" to="." method="_on_cancel_pressed"]

@@ -7,6 +7,7 @@ signal unlock
 
 @export var chic: Chic: set = set_held_chic
 @export var demo: bool: set = set_demo
+@export var disable_inputs: bool
 
 @onready var body: AnimatedSprite2D = $Body
 @onready var hands: Node2D = $Hands
@@ -73,8 +74,11 @@ func _ready():
 	)
 	
 	GameManager.game_over.connect(func(_won: bool):
+		if demo:
+			return
 		set_hands_position(Vector2.ZERO if _won else Vector2.DOWN)
 		locked = true
+		disable_inputs = true
 		lock_timer.stop()
 		if chic:
 			holding.remove_child(chic)
@@ -96,18 +100,19 @@ func _ready():
 
 
 func _input(_event):
-	if demo:
+	if demo or disable_inputs:
 		return
 	if Input.is_action_just_pressed("pick"):
-		if pd[hands_position].has_overlapping_bodies() and pd[hands_position].get_overlapping_bodies()[0] is Chic:
-			chic = pd[hands_position].get_overlapping_bodies()[0]
-		else:
-			place_chic_back(pd[hands_position].global_position)
-	
+		pickup()
+		
+	for input in ["move_left", "move_right", "move_up", "move_down", "pick", "look_left", "look_right", "look_up", "look_down"]:
+		if _event.is_action_pressed(input):
+			get_viewport().set_input_as_handled()
+			break
 
 
 func _process(delta):
-	if demo:
+	if demo or disable_inputs:
 		return
 	
 	move(Input.get_vector("move_left", "move_right", "move_up", "move_down").round())
@@ -129,6 +134,13 @@ func _process(delta):
 		sweat.emitting = true
 	sweat_timeout -= delta
 
+func pickup():
+	if locked:
+		return
+	if pd[hands_position].has_overlapping_bodies() and pd[hands_position].get_overlapping_bodies()[0] is Chic:
+		chic = pd[hands_position].get_overlapping_bodies()[0]
+	else:
+		place_chic_back(pd[hands_position].global_position)
 
 func set_hands_position(pos: Vector2 = Vector2.ZERO):
 	if pos == hands_position or not HAND_POSITIONS.has(pos):
@@ -162,7 +174,7 @@ func lock(timeout: float = 0, add_to_existing: bool = false):
 	lock_timer.start(timeout + (lock_timer.time_left if add_to_existing else 0.0))
 
 
-func move(dir: Vector2 = Vector2.ZERO):
+func move(dir: Vector2 = Vector2.ZERO, hold: bool = false):
 	if locked or not [Vector2.LEFT, Vector2.RIGHT, Vector2.UP, Vector2.DOWN].has(dir):
 		return
 	
@@ -175,7 +187,7 @@ func move(dir: Vector2 = Vector2.ZERO):
 	pd[dir].position = dir * GameManager.PIXEL_UNIT * 2
 	if pd[dir].has_overlapping_bodies() and pd[dir].get_overlapping_bodies()[0] is Chic:
 		var target_chic = pd[dir].get_overlapping_bodies()[0]
-		if not Input.is_action_pressed("hold") and chic:
+		if not (Input.is_action_pressed("hold") or hold) and chic:
 			get_tree().create_tween()\
 				.tween_property(target_chic, "global_position", global_position, PICKUP_SPEED)\
 				.set_trans(Tween.TRANS_CIRC)\

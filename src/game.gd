@@ -4,6 +4,7 @@ extends Node2D
 @onready var bg: TextureRect = $Bg
 @onready var camera: Camera2D = GameManager.cam
 @onready var nest: Node2D = $Nest
+@onready var timer := $EggTimer
 
 var chic_node = load("res://src/game/Chic/chic.tscn")
 var bear_node = load("res://src/game/Bear/bear.tscn")
@@ -38,6 +39,7 @@ func _ready():
 	).set_delay(15)
 	
 	GameManager.game_over.connect(func(won):
+		timer.stop()
 		if (won):
 			gather_chics() 
 			return
@@ -98,7 +100,10 @@ func generate_level(_grid: Vector2 = Vector2.ZERO):
 			bear.locked = true
 			add_child(bear)	
 			bear.place_chic.connect(place_chic)
-			bear.unlock.connect(check_board)
+			bear.unlock.connect(func():
+				if GameManager.is_winning_board(grass, nest):
+					GameManager.game_over.emit(true)
+			)
 			bear.global_position = world_pos
 			continue
 			
@@ -119,7 +124,7 @@ func place_chic(chic: Chic):
 	nest.add_child(chic)
 
 func gather_chics():
-	var screen_coords = get_viewport_rect().size / GameManager.cam.zoom
+
 	var tween = get_tree().create_tween().set_parallel(true)\
 		.set_ease(Tween.EASE_IN)\
 		.set_trans(Tween.TRANS_SINE)
@@ -160,47 +165,6 @@ func leave_chics():
 		tween.tween_property(chic, "global_position:y", -screen_coords.y, 1.5)
 	tween.finished.connect(func(): show_win_lose_dialog(false))
 
-func check_board():
-	# the total found color groups in the map
-	var groups: int = 0
-	
-	# the colors based on chic positions
-	var color_map: Dictionary = {}
-	
-	# the total unique chic colors
-	var colors: Array[int] = []
-	
-	# The number of chics in the map
-	var total_chics = grass.get_used_rect().size.x * grass.get_used_rect().size.y - 1
-	
-	for chic in nest.get_children():
-		color_map[Vector2(grass.local_to_map(grass.to_local(chic.global_position)))] = chic.color
-		if not colors.has(chic.color):
-			colors.append(chic.color)
-	
-	var check_pos: Vector2 = color_map.keys()[0]
-	
-	# check validity only if the bear is not holding a chic
-	var recheck: bool = total_chics == color_map.size()
-	while recheck:
-		color_map = GameManager.flood_fill(color_map, check_pos)
-
-		# every time we flood fill a color we increment groups 
-		groups += 1
-		recheck = false
-		
-		# only continue checking if there are unvisited positions
-		for pos in color_map.keys():
-			if color_map[pos] == -1:
-				continue
-			check_pos = pos
-			recheck = true
-			break
-
-	# If all the chics are on the ground and all same colored ones are grouped together we win
-	if groups == colors.size():
-		GameManager.game_over.emit(true)
-
 func show_win_lose_dialog(won: bool):
 	var dialog: Window = $ui/Dialog
 	var label: Label = $ui/Dialog/MarginContainer/VBoxContainer/Label
@@ -209,13 +173,27 @@ func show_win_lose_dialog(won: bool):
 	
 	if not won:
 		label.text = "OH no, time's up! \n the chics have ran away!"
+		cancel_btn.text = "Exit level"
+		ok_btn.grab_focus()
 	else:
 		label.text = "HOORAY! \n the chics are back in the coop. \n how nice!"
+		cancel_btn.text = "Next level"
+		cancel_btn.grab_focus()
 		
 	dialog.popup_centered()
-	ok_btn.grab_focus()
 
 func restart():
 	$ui/Dialog.hide()
-	generate_level()
+	generate_level(grid)
 	$EggTimer.start()
+	if not SoundController.bgmPlayer.playing:
+		SoundController.play_music(GameManager.bgm.main2)
+
+
+func _on_ok_pressed():
+	restart()
+
+
+func _on_cancel_pressed():
+	SoundController.bgmPlayer.stop()
+	get_tree().change_scene_to_packed(load("res://src/ui/Menu/menu.tscn"))

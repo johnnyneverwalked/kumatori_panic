@@ -5,8 +5,8 @@
 [ext_resource type="Texture2D" uid="uid://cx476j0qmkpmw" path="res://assets/sprites/bear-hop.png" id="3_p653d"]
 [ext_resource type="Texture2D" uid="uid://dg1rsa8ixe450" path="res://assets/sprites/bear-sad-happy.png" id="4_bxnbb"]
 [ext_resource type="Texture2D" uid="uid://bvxj0se5tes4t" path="res://assets/sprites/bear-hand-2.png" id="6_2qmwo"]
+[ext_resource type="Texture2D" uid="uid://r5lvuabgtt1h" path="res://assets/ui/crosshair026.png" id="6_j8n6m"]
 [ext_resource type="Texture2D" uid="uid://dalt1v1gn2o0q" path="res://assets/sprites/droplet.png" id="7_clnmm"]
-[ext_resource type="Texture2D" uid="uid://r5lvuabgtt1h" path="res://assets/sprites/crosshair026.png" id="7_q4cll"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ewhnb"]
 shader = ExtResource("1_50dmx")
@@ -254,7 +254,7 @@ z_index = -1
 texture_filter = 1
 position = Vector2(-24, 0)
 scale = Vector2(0.4, 0.4)
-texture = ExtResource("7_q4cll")
+texture = ExtResource("6_j8n6m")
 
 [node name="LockTimer" type="Timer" parent="."]
 one_shot = true
