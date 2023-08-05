@@ -3,6 +3,12 @@ extends Node
 signal game_over(won)
 
 const PIXEL_UNIT: int = 16
+const SCENES = {
+	menu = preload("res://src/ui/Menu/menu.tscn"),
+	game = preload("res://src/game.tscn"),
+}
+
+var GAME_DATA: GameData = preload("res://src/resources/game_data.tres")
 
 const sfx: Dictionary = {
 	rooster = preload("res://assets/audio/sfx/rooster.ogg"),
@@ -29,7 +35,7 @@ const chic_colors: Dictionary = {
 	Colors.RED: Color("#cb4d68"),
 	Colors.PINK: Color("#f7a4c4"),
 	Colors.GREEN: Color("#5bb361"),
-	Colors.WHITE: Color.WHITE
+	Colors.WHITE: Color("#ffffff")
 }
 const bear_colors: Dictionary = {
 	skin_dark = Color("#72471c"),
@@ -43,10 +49,13 @@ const grass_colors: Dictionary = {
 
 const chic_outline_color: Color = Color("#393457")
 
+const chic_node = preload("res://src/game/Chic/chic.tscn")
+const bear_node = preload("res://src/game/Bear/bear.tscn")
 
 var time_scale: float = 1: set = set_time_scale
 var cam: Camera2D
 var can_pause: bool = true
+
 
 func _ready():
 	SoundController.set_music_volume(1)
@@ -64,6 +73,7 @@ func _ready():
 	
 	randomize()
 
+
 func _notification(what):
 	
 	match what:
@@ -80,6 +90,26 @@ func set_time_scale(_time_scale: float = 1):
 	time_scale = clamp(_time_scale, .2, 1.0)
 	Engine.time_scale = time_scale
 	AudioServer.playback_speed_scale = 2.0 - time_scale
+
+
+func set_screen_size(index: int):
+	match index:
+		0:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+			DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, false)
+			DisplayServer.window_set_size(Vector2i(1440, 810))
+		1:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+			DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, true)
+			DisplayServer.window_set_size(DisplayServer.screen_get_size())
+			DisplayServer.window_set_position(Vector2i.ZERO)
+		2:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+			DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, false)
+
+	if index != GAME_DATA.settings.screen_size:
+		GAME_DATA.update_settings({screen_size = index})
+
 
 func flood_fill(color_map: Dictionary = {}, start: Vector2 = Vector2.ZERO, target_color: int = -1):
 	
@@ -147,3 +177,44 @@ func is_winning_board(grass: TileMap, nest: Node2D):
 			break
 	
 	return groups == colors.size()
+
+func generate_level(for_node: Node2D, grid: Vector2, contents: Array, grass: TileMap, nest: Node2D, bear: Bear = null) -> Bear:
+	for node in nest.get_children():
+		node.queue_free()
+	if bear != null:
+		bear.queue_free()
+		bear = null
+	
+	var chic: Chic
+	grass.place_cells(grid)
+	
+	var bounds = Rect2(grass.get_used_rect())
+	bounds.position = bounds.position * GameManager.PIXEL_UNIT * 2 + grass.global_position
+	bounds.size = bounds.size * GameManager.PIXEL_UNIT * 2
+	
+	var normalised_cell: Vector2 = grass.get_used_rect().position
+	var cells = grass.get_used_cells(0)
+	cells.append_array(grass.get_used_cells(1))
+
+	for index in contents.size():
+		var color = contents[index]
+		var pos = Vector2(index % int(grid.x), floor(index / grid.x)) + normalised_cell
+
+		if not color is int:
+			bear = bear_node.instantiate()
+			bear.disable_inputs = true
+			bear.bounds = bounds
+			bear.locked = false
+			GameManager._place_at(pos, grass.global_position, bear, for_node)
+			continue
+		chic = chic_node.instantiate()
+		chic.color = color
+		GameManager._place_at(pos, grass.global_position, chic, nest)
+	
+	return bear
+
+func _place_at(pos: Vector2, tilemap_pos, entity, parent):
+	var world_pos = Vector2(pos) * GameManager.PIXEL_UNIT * 2 + tilemap_pos + Vector2.ONE * GameManager.PIXEL_UNIT
+	parent.add_child(entity)
+	entity.global_position = world_pos
+

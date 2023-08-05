@@ -20,6 +20,11 @@ var credits_tween: Tween
 func _ready():
 	GameManager.can_pause = false
 	$Dots.visible = true
+	var zen_mode: Button = controls.get_node("ZenMode")
+	zen_mode.text = "zen mode" if not GameManager.GAME_DATA.game_state.zen_mode_locked else "[locked]"
+	zen_mode.disabled = GameManager.GAME_DATA.game_state.zen_mode_locked
+	
+	
 	bear.set_held_chic(chic)
 	bear.hand_L.position = Vector2(-5, 2)
 	bear.hand_R.position = Vector2(5, 2)
@@ -112,7 +117,7 @@ func _on_quit_pressed():
 
 
 func _on_play_pressed():
-	get_tree().change_scene_to_packed(load("res://src/game.tscn"))
+	get_tree().change_scene_to_packed(GameManager.SCENES.game)
 
 
 func _on_zen_mode_pressed():
@@ -134,7 +139,26 @@ func _on_how_to_pressed():
 
 
 func _on_settings_pressed():
-	pass # Replace with function body.
+	var dialog = AcceptDialog.new()
+	dialog.theme = load("res://src/resources/main_theme.tres")
+	dialog.title = "Share progress data"
+	dialog.dialog_text = "
+		This will show the game's folder. 
+		There should be a file called 'data.sv' containing the sharable game data.
+		Please share this file with me :)
+	"
+	dialog.ok_button_text = "Show folder"
+	dialog.add_theme_font_size_override("title_font_size", 32)
+	
+	add_child(dialog)
+	dialog.popup_centered()
+	
+	dialog.confirmed.connect(func(): 
+		OS.shell_show_in_file_manager(ProjectSettings.globalize_path("user://"), true)
+		dialog.queue_free()
+	)
+	dialog.canceled.connect(dialog.queue_free)
+	
 
 
 func _on_credits_pressed():

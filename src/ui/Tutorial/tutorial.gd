@@ -10,8 +10,7 @@ signal return_to_menu
 @onready var controls: VBoxContainer = $CanvasLayer/Text/Controls
 @onready var lbl: RichTextLabel = $CanvasLayer/Text/Label
 
-var chic_node = load("res://src/game/Chic/chic.tscn")
-var bear_node = load("res://src/game/Bear/bear.tscn")
+
 var bear: Bear
 var bounds: Rect2
 var tutorial_tween: Tween
@@ -27,7 +26,7 @@ var tutorial_steps: Array[Dictionary] = [
 		text = "[center]It's up to Bear to return them home.[/center]"
 	},
 	{
-		delay = 3, 
+		delay = 4, 
 		text = "[center]Help Bear gather up all of his fluffy friends by matching chickens of the same color.[/center]"
 	},
 	{
@@ -35,8 +34,9 @@ var tutorial_steps: Array[Dictionary] = [
 		text = "[center]Be careful! If the time runs out they will run away.[/center]"
 	},
 	{
-		delay = 5, 
-		text = "[center]You can look around by using the ARROW keys.[/center]"
+		delay = 4, 
+		text = "[center]You can look around by using the [%action%].[/center]",
+		action = func(is_keyboard: bool): return "ARROW keys" if is_keyboard else "RIGHT STICK"
 	},
 	{delay = 1, method = "set_hands_position", args = [Vector2.DOWN]},
 	{delay = .5, method = "set_hands_position", args = [Vector2.LEFT]},
@@ -44,12 +44,14 @@ var tutorial_steps: Array[Dictionary] = [
 	{delay = .5, method = "set_hands_position", args = [Vector2.RIGHT]},
 	{
 		delay = 1, 
-		text = "[center]Press [SPACE] to pick up a chick[/center]"
+		text = "[center]Press [%action%] to pick up a chick[/center]",
+		action = func(is_keyboard: bool): return "SPACE" if is_keyboard else "A or R1"
 	},
 	{delay = 1, method = "pickup", args = []},
 	{
 		delay = 1, 
-		text = "[center]Press [SPACE] again to put it back down[/center]"
+		text = "[center]Press [%action%] again to put it back down[/center]",
+		action = func(is_keyboard: bool): return "SPACE" if is_keyboard else "A or R1"
 	},
 	{delay = 1, method = "pickup", args = []},
 	{
@@ -63,7 +65,8 @@ var tutorial_steps: Array[Dictionary] = [
 	{delay = .5, method = "set_hands_position", args = [Vector2.RIGHT]},
 	{
 		delay = 1, 
-		text = "[center]You can move bear with [WASD][/center]"
+		text = "[center]You can move bear with [%action%][/center]",
+		action = func(is_keyboard: bool): return "WASD" if is_keyboard else "LEFT STICK"
 	},
 	{delay = 2, method = "move", args = [Vector2.RIGHT]},
 	{delay = .5, method = "move", args = [Vector2.LEFT]},
@@ -75,7 +78,8 @@ var tutorial_steps: Array[Dictionary] = [
 	{delay = .5, method = "move", args = [Vector2.RIGHT]},
 	{
 		delay = 1, 
-		text = "[center]You can hold [SHIFT] to pick it up instead.[/center]"
+		text = "[center]You can hold [%action%] to pick it up instead.[/center]",
+		action = func(is_keyboard: bool): return "SHIFT" if is_keyboard else "X or L1"
 	},
 	{delay = 2, method = "move", args = [Vector2.LEFT, true]},
 	{
@@ -142,12 +146,16 @@ func _ready():
 	tutorial_tween = create_tween()
 	tutorial_tween.stop()
 
-	generate_level(grid_contents[0])
-
+	bear = GameManager.generate_level(self, Vector2.ONE * 3, grid_contents[0], grass, nest, bear)
+	bear.place_chic.connect(place_chic)
+	bounds = bear.bounds
+	queue_redraw()
 	
 	for _step in tutorial_steps:
 		var step = _step.duplicate(true)
 		if step.has("text"):
+			if step.has("action") and step.action is Callable and step.text.contains("%action%"):
+				step.text = step.text.replace("%action%", step.get("action").call(not Input.get_connected_joypads().size()))
 			tutorial_tween.tween_property(lbl, "text", step.text, 0).set_delay(step.delay)
 			continue
 		if not step.has("target"):
@@ -158,7 +166,10 @@ func _ready():
 	tutorial_tween.play()
 	
 	tutorial_tween.finished.connect(func(): 
-		generate_level(grid_contents[1])
+		bear = GameManager.generate_level(self, Vector2.ONE * 3, grid_contents[1], grass, nest, bear)
+		bounds = bear.bounds
+		queue_redraw()
+		bear.place_chic.connect(place_chic)
 		bear.disable_inputs = false
 		controls.visible = true
 		bear.unlock.connect(func():
@@ -170,46 +181,8 @@ func _ready():
 		)
 	)
 	
-func generate_level(contents: Array):
-	for node in nest.get_children():
-		node.queue_free()
-	if bear != null:
-		bear.queue_free()
-		bear = null
-	
-	var chic: Chic
-	var grid: Vector2 = Vector2.ONE * 3
-	grass.place_cells(grid)
-	
-	bounds = Rect2(grass.get_used_rect())
-	bounds.position = bounds.position * GameManager.PIXEL_UNIT * 2 + grass.global_position
-	bounds.size = bounds.size * GameManager.PIXEL_UNIT * 2
-	
-	var normalised_cell: Vector2 = grass.get_used_rect().position
-	var cells = grass.get_used_cells(0)
-	cells.append_array(grass.get_used_cells(1))
-	queue_redraw()
 
-	
-	for index in contents.size():
-		var color = contents[index]
-		var pos = Vector2(index % int(grid.x), floor(index / grid.y)) + normalised_cell
-		if not color:
-			bear = bear_node.instantiate()
-			bear.disable_inputs = true
-			bear.bounds = bounds
-			bear.place_chic.connect(place_chic)
-			bear.locked = false
-			_place_at(pos, bear, self)
-			continue
-		chic = chic_node.instantiate()
-		chic.color = color
-		_place_at(pos, chic, nest)
 
-func _place_at(pos: Vector2, entity, parent):
-	var world_pos = Vector2(pos) * GameManager.PIXEL_UNIT * 2 + grass.global_position + Vector2.ONE * GameManager.PIXEL_UNIT
-	parent.add_child(entity)
-	entity.global_position = world_pos
 
 func place_chic(chic: Chic):
 	if not chic:

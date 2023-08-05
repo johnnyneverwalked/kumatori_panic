@@ -51,7 +51,7 @@ libraries = {
 "": SubResource("AnimationLibrary_ragfw")
 }
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite" type="Sprite2D" parent="."]
 z_index = -1
 texture_filter = 1
 position = Vector2(0, 2)

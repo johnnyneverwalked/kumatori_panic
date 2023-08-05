@@ -8,7 +8,8 @@ func _on_focus_entered():
 		.set_trans(Tween.TRANS_CUBIC)\
 		.set_ease(Tween.EASE_OUT)
 	tween.tween_property(self, "position:x", GameManager.PIXEL_UNIT * 4, tween_duration)
-	tween.tween_property($ProgressBar, "value", 100, tween_duration)
+	if not disabled:
+		tween.tween_property($ProgressBar, "value", 100, tween_duration)
 
 
 func _on_focus_exited():

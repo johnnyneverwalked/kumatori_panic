@@ -68,7 +68,7 @@ func _input(event):
 			fade_out()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _physics_process(delta):
+func _physics_process(_delta):
 	bear.velocity = Vector2.RIGHT * 125
 	if bear.demo:
 		bear.move_and_slide()

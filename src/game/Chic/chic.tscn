@@ -231,6 +231,8 @@ z_as_relative = false
 collision_layer = 2
 collision_mask = 0
 script = ExtResource("1_3al1d")
+color = null
+shadowed = null
 
 [node name="Shadow" type="Sprite2D" parent="."]
 texture_filter = 1

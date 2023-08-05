@@ -20,7 +20,7 @@ func _ready():
 	sprite.material.set_shader_parameter("can_blink", true)
 	
 	sprite.scale = Vector2.ZERO
-	get_tree().create_tween()\
+	create_tween()\
 		.tween_property(sprite, "scale", Vector2.ONE, .25)\
 		.set_trans(Tween.TRANS_ELASTIC)\
 		.set_ease(Tween.EASE_OUT)

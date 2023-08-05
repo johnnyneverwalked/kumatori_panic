@@ -34,6 +34,7 @@ shadow_size = 8
 default_base_scale = 1.0
 default_font = ExtResource("1_58vg6")
 default_font_size = 16
+AcceptDialog/constants/buttons_separation = 10
 AcceptDialog/styles/panel = SubResource("StyleBoxFlat_fvqfr")
 Button/styles/focus = SubResource("StyleBoxFlat_3784l")
 Button/styles/hover = SubResource("StyleBoxFlat_sk20x")
