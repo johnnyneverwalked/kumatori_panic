@@ -3,10 +3,6 @@ extends Node
 signal game_over(won)
 
 const PIXEL_UNIT: int = 16
-const SCENES = {
-	menu = preload("res://src/ui/Menu/menu.tscn"),
-	game = preload("res://src/game.tscn"),
-}
 
 var GAME_DATA: GameData = preload("res://src/resources/game_data.tres")
 

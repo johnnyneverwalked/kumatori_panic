@@ -47,7 +47,7 @@ func _ready():
 			)
 			await zen_dialog.visibility_changed
 
-	var tween = get_tree().create_tween().set_loops()\
+	var tween = create_tween().set_loops()\
 	.set_trans(Tween.TRANS_SINE)\
 	.set_ease(Tween.EASE_IN_OUT)
 
@@ -194,7 +194,7 @@ func place_chic(chic: Chic):
 func gather_chics():
 	var total_level_time: float = (Time.get_ticks_msec() - level_start_time) / 1000.0
 	GameManager.GAME_DATA.save_level_time(grid, total_level_time)
-	var tween = get_tree().create_tween().set_parallel(true)\
+	var tween = create_tween().set_parallel(true)\
 		.set_ease(Tween.EASE_IN)\
 		.set_trans(Tween.TRANS_SINE)
 	tween.pause()
@@ -237,7 +237,7 @@ func gather_chics():
 func leave_chics():
 	var dir: int
 	var screen_coords = get_viewport_rect().size / GameManager.cam.zoom
-	var tween = get_tree().create_tween().set_parallel(true)\
+	var tween = create_tween().set_parallel(true)\
 		.set_ease(Tween.EASE_IN)\
 		.set_trans(Tween.TRANS_SINE)
 	SoundController.sfxPlayer.pitch_scale = 1.5
@@ -293,7 +293,7 @@ func _on_ok_pressed():
 
 func _on_cancel_pressed():
 	SoundController.bgmPlayer.stop()
-	get_tree().change_scene_to_packed(GameManager.SCENES.menu)
+	get_tree().change_scene_to_packed(load("res://src/ui/Menu/menu.tscn"))
 
 
 func _on_export_pressed():

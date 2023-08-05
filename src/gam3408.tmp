@@ -1,0 +1,240 @@
+[gd_scene load_steps=7 format=3 uid="uid://ckgk82uemd4bg"]
+
+[ext_resource type="Script" path="res://src/game.gd" id="1_61h8o"]
+[ext_resource type="Texture2D" uid="uid://b2rvs821tidmp" path="res://assets/sprites/allbackgroundstars.png" id="2_5lga2"]
+[ext_resource type="PackedScene" uid="uid://cfnpgolpb33o2" path="res://src/game/EggTimer/egg_timer.tscn" id="4_8cmid"]
+[ext_resource type="PackedScene" uid="uid://btpqjq87w544g" path="res://src/game/Coop/coop.tscn" id="4_y3jmo"]
+[ext_resource type="PackedScene" uid="uid://px8uey4vnmw4" path="res://src/game/Grass/tile_map.tscn" id="4_yo0vf"]
+[ext_resource type="Theme" uid="uid://dd2gdeigo2urf" path="res://src/resources/main_theme.tres" id="5_45ks5"]
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_61h8o")
+zen_mode = true
+
+[node name="Bg" type="TextureRect" parent="."]
+z_index = -1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -240.0
+offset_top = -792.0
+offset_right = 240.0
+offset_bottom = 136.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_5lga2")
+expand_mode = 1
+stretch_mode = 6
+metadata/_edit_lock_ = true
+
+[node name="Grass" parent="." instance=ExtResource("4_yo0vf")]
+
+[node name="Nest" type="Node2D" parent="."]
+position = Vector2(40, -8)
+
+[node name="Coop" parent="." instance=ExtResource("4_y3jmo")]
+position = Vector2(184, -96)
+
+[node name="EggTimer" parent="." instance=ExtResource("4_8cmid")]
+z_index = 1
+position = Vector2(188, 96)
+time = 15
+autostart = false
+
+[node name="ui" type="CanvasLayer" parent="."]
+layer = 0
+
+[node name="Dialog" type="Window" parent="ui"]
+transparent_bg = true
+canvas_item_default_texture_filter = 0
+mode = 3
+position = Vector2i(320, 180)
+size = Vector2i(832, 360)
+visible = false
+wrap_controls = true
+transient = true
+unresizable = true
+borderless = true
+transparent = true
+theme = ExtResource("5_45ks5")
+
+[node name="ColorRect" type="ColorRect" parent="ui/Dialog"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.223529, 0.203922, 0.341176, 0.784314)
+
+[node name="MarginContainer" type="MarginContainer" parent="ui/Dialog"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/margin_left = 64
+theme_override_constants/margin_top = 64
+theme_override_constants/margin_right = 64
+theme_override_constants/margin_bottom = 64
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ui/Dialog/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 64
+alignment = 1
+
+[node name="Label" type="Label" parent="ui/Dialog/MarginContainer/VBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/font_size = 64
+text = "OH no, time's up!
+the chicks have ran away!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ui/Dialog/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 64
+
+[node name="ok" type="Button" parent="ui/Dialog/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("5_45ks5")
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 48
+text = "try again"
+
+[node name="cancel" type="Button" parent="ui/Dialog/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("5_45ks5")
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 48
+text = "exit level"
+
+[node name="zen_dialog" type="Window" parent="ui"]
+transparent_bg = true
+canvas_item_default_texture_filter = 0
+mode = 3
+position = Vector2i(320, 180)
+size = Vector2i(1103, 424)
+visible = false
+wrap_controls = true
+transient = true
+unresizable = true
+borderless = true
+transparent = true
+theme = ExtResource("5_45ks5")
+
+[node name="ColorRect" type="ColorRect" parent="ui/zen_dialog"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.223529, 0.203922, 0.341176, 0.784314)
+
+[node name="MarginContainer" type="MarginContainer" parent="ui/zen_dialog"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/margin_left = 64
+theme_override_constants/margin_top = 64
+theme_override_constants/margin_right = 64
+theme_override_constants/margin_bottom = 64
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ui/zen_dialog/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 64
+alignment = 1
+
+[node name="Label" type="Label" parent="ui/zen_dialog/MarginContainer/VBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 48
+text = "Welcome to zen mode!
+
+This is a chill, endless mode  for you to enjoy.
+There is no timer pressure here,
+ so grab a cup of coffee, relax and have fun ^_^"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ui/zen_dialog/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 64
+
+[node name="ok" type="Button" parent="ui/zen_dialog/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("5_45ks5")
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 48
+text = "Awesome!"
+
+[node name="MarginContainer" type="MarginContainer" parent="ui"]
+clip_contents = true
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 320.0
+grow_vertical = 2
+size_flags_horizontal = 2
+size_flags_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ui/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+theme = ExtResource("5_45ks5")
+theme_override_constants/separation = 16
+
+[node name="Stage" type="Label" parent="ui/MarginContainer/VBoxContainer"]
+visible = false
+texture_filter = 1
+layout_mode = 2
+theme = ExtResource("5_45ks5")
+theme_override_colors/font_outline_color = Color(0.223529, 0.203922, 0.341176, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 32
+text = "stage: 1"
+autowrap_mode = 2
+
+[node name="Collected" type="Label" parent="ui/MarginContainer/VBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+theme = ExtResource("5_45ks5")
+theme_override_colors/font_outline_color = Color(0.223529, 0.203922, 0.341176, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 32
+text = "Chicks collected: 0"
+autowrap_mode = 2
+
+[node name="Export" type="Button" parent="ui/MarginContainer/VBoxContainer"]
+visible = false
+texture_filter = 1
+layout_mode = 2
+theme = ExtResource("5_45ks5")
+theme_override_colors/font_outline_color = Color(0.223529, 0.203922, 0.341176, 1)
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 48
+text = "export"
+alignment = 0
+
+[connection signal="pressed" from="ui/Dialog/MarginContainer/VBoxContainer/HBoxContainer/ok" to="." method="_on_ok_pressed"]
+[connection signal="pressed" from="ui/Dialog/MarginContainer/VBoxContainer/HBoxContainer/cancel" to="." method="_on_cancel_pressed"]
+[connection signal="pressed" from="ui/MarginContainer/VBoxContainer/Export" to="." method="_on_export_pressed"]

@@ -39,7 +39,7 @@ func _ready():
 		SoundController.play_sound(GameManager.sfx.rooster, false)
 		
 		# vibrate
-		var tween = get_tree().create_tween().set_loops(25)
+		var tween = create_tween().set_loops(25)
 		tween.tween_property(sprite, "rotation_degrees", 15, 1.0 / 60.0)
 		tween.tween_property(sprite, "rotation_degrees", 0, 1.0 / 60.0)
 		tween.tween_property(sprite, "rotation_degrees", -15, 1.0 / 60.0)

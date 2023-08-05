@@ -117,7 +117,7 @@ func _on_quit_pressed():
 
 
 func _on_play_pressed():
-	get_tree().change_scene_to_packed(GameManager.SCENES.game)
+	get_tree().change_scene_to_packed(load("res://src/game.tscn"))
 
 
 func _on_zen_mode_pressed():

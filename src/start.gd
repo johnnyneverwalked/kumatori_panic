@@ -16,7 +16,7 @@ func _ready():
 	await get_tree().create_timer(.5).timeout
 	SoundController.play_sound(GameManager.sfx.block)
 	
-	var tween = get_tree().create_tween()\
+	var tween = create_tween()\
 		.set_trans(Tween.TRANS_ELASTIC)\
 		.set_ease(Tween.EASE_OUT)
 	
@@ -78,12 +78,12 @@ func _physics_process(_delta):
 
 func fade_out():
 	locked = true
-	var tween = get_tree().create_tween()
+	var tween = create_tween()
 	tween.tween_property($ColorRectTop, "color:a", 1, .5)\
 		.set_trans(Tween.TRANS_QUAD)\
 		.set_ease(Tween.EASE_OUT)
 	tween.finished.connect(func(): 
 		SoundController.clean_players()
 		await get_tree().create_timer(.1).timeout
-		get_tree().change_scene_to_packed(GameManager.SCENES.menu)
+		get_tree().change_scene_to_packed(load("res://src/ui/Menu/menu.tscn"))
 	)

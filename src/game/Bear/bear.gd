@@ -58,7 +58,7 @@ func _ready():
 	hands_position = Vector2.RIGHT
 	
 	body.scale = Vector2.ZERO
-	get_tree().create_tween()\
+	create_tween()\
 		.tween_property(body, "scale", Vector2.ONE, .25)\
 		.set_trans(Tween.TRANS_ELASTIC)\
 		.set_ease(Tween.EASE_OUT)
@@ -88,7 +88,7 @@ func _ready():
 		body.play("happy" if _won else "sad")
 	)
 	
-	var tween = get_tree().create_tween().set_loops().bind_node(self)\
+	var tween = create_tween().set_loops().bind_node(self)\
 		.set_trans(Tween.TRANS_CIRC)\
 		.set_ease(Tween.EASE_IN_OUT)
 	
@@ -148,7 +148,7 @@ func set_hands_position(pos: Vector2 = Vector2.ZERO):
 	hands_position = pos
 	
 	#animate hand movement
-	var tween = get_tree().create_tween().set_parallel(true)\
+	var tween = create_tween().set_parallel(true)\
 		.set_trans(Tween.TRANS_BACK)\
 		.set_ease(Tween.EASE_OUT)
 	tween.tween_property(hands, "position", HAND_POSITIONS.get(pos).pos + body.position, PICKUP_SPEED)
@@ -188,14 +188,14 @@ func move(dir: Vector2 = Vector2.ZERO, hold: bool = false):
 	if pd[dir].has_overlapping_bodies() and pd[dir].get_overlapping_bodies()[0] is Chic:
 		var target_chic = pd[dir].get_overlapping_bodies()[0]
 		if not (Input.is_action_pressed("hold") or hold) and chic:
-			get_tree().create_tween()\
+			create_tween()\
 				.tween_property(target_chic, "global_position", global_position, PICKUP_SPEED)\
 				.set_trans(Tween.TRANS_CIRC)\
 				.set_ease(Tween.EASE_IN_OUT)
 		else:
 			set_held_chic(target_chic)
 	
-	var tween = get_tree().create_tween()\
+	var tween = create_tween()\
 		.set_trans(Tween.TRANS_BACK)\
 		.set_ease(Tween.EASE_OUT)
 	tween.tween_property(self, "global_position", global_position + dir * GameManager.PIXEL_UNIT * 2, PICKUP_SPEED)
@@ -234,7 +234,7 @@ func set_held_chic(_chic: Chic):
 	original_chic_scale = chic.scale
 	chic.scale /= scale
 	
-	get_tree().create_tween()\
+	create_tween()\
 		.tween_property(chic, "position", Vector2.ZERO, PICKUP_SPEED)\
 #		.tween_property(chic, "global_position", holding.global_position, PICKUP_SPEED)\
 		.set_trans(Tween.TRANS_CIRC)\
@@ -260,7 +260,7 @@ func place_chic_back(pos: Vector2):
 	chic.shadow.visible = true
 	chic.scale = original_chic_scale
 	
-	var tween = get_tree().create_tween()
+	var tween = create_tween()
 	tween.tween_property(chic, "global_position", pos, PICKUP_SPEED)\
 		.set_trans(Tween.TRANS_CIRC)\
 		.set_ease(Tween.EASE_IN_OUT)
