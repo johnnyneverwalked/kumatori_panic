@@ -293,7 +293,7 @@ func _on_ok_pressed():
 
 func _on_cancel_pressed():
 	SoundController.bgmPlayer.stop()
-	get_tree().change_scene_to_packed(load("res://src/start.tscn"))
+	get_tree().change_scene_to_packed(GameManager.SCENES.menu)
 
 
 func _on_export_pressed():

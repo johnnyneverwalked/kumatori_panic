@@ -85,5 +85,5 @@ func fade_out():
 	tween.finished.connect(func(): 
 		SoundController.clean_players()
 		await get_tree().create_timer(.1).timeout
-		get_tree().change_scene_to_packed(load("res://src/ui/Menu/menu.tscn"))
+		get_tree().change_scene_to_packed(GameManager.SCENES.menu)
 	)
