@@ -13,6 +13,29 @@ const levels_folder_path = "res://src/resources/levels/"
 const MIN_GRID_SIZE: Vector2 = Vector2.ONE * 3
 const MAX_GRID_SIZE: Vector2 = Vector2.ONE * 8
 
+const LEVEL_TIMES = {
+  '0': 30, # '8.71',
+  '1': 30, # '21.70',
+  '2': 45, # '25.68',
+  '3': 45, # '36.81',
+  '4': 60, # '44.36',
+  '5': 60, # '57.30',
+  '6': 120, # '76.42',
+  '7': 120, # '117.75',
+  '8': 120, # '119.12',
+  '9': 120, # '106.47',
+  '10': 120, # '103.38',
+  '11': 120, # '118.15',
+  '12': 150, # '111.95',
+  '13': 150, # '108.45',
+  '14': 150, # '119.07',
+  '15': 150, # '138.18',
+  '16': 240, # '144.99',
+  '17': 240, # '212.03',
+  '18': 300, # '219.03',
+  '19': 300, # '253.61'
+}
+
 const DEFAULT_STATE = {
 	current_level = 0,
 	unlocked_levels = 0,
@@ -77,7 +100,6 @@ func load_state():
 	SoundController.set_music_volume(settings.music_volume)
 	SoundController.set_sound_volume(settings.sound_volume)
 	
-	print_debug(game_state)
 
 func delete_state():
 	DirAccess.remove_absolute(save_file_path)
@@ -111,8 +133,6 @@ func load_settings():
 		
 	SoundController.set_music_volume(settings.music_volume)
 	SoundController.set_sound_volume(settings.sound_volume)
-	
-	print_debug(settings)
 
 func delete_settings():
 	DirAccess.remove_absolute(settings_file_path)

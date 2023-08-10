@@ -44,7 +44,6 @@ offset_right = -64.0
 offset_bottom = 56.0
 
 [node name="Back" parent="Control" instance=ExtResource("3_qc2xe")]
-z_index = 1
 layout_mode = 1
 offset_left = 1.76
 offset_right = 257.76

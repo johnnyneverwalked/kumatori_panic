@@ -156,6 +156,8 @@ func generate_scripted_level():
 	
 	bear = GameManager.generate_level(self, grid, contents, grass, nest, bear)
 	handle_post_level_generation()
+	timer.time = GameManager.GAME_DATA.LEVEL_TIMES.get(str(level_index))
+	timer.alert_at = min(30, timer.time / 3)
 	timer.start()
 
 
