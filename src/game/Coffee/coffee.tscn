@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3 uid="uid://b645vwclqkbd5"]
+
+[ext_resource type="Script" path="res://src/game/Coffee/coffee.gd" id="1_nqo1y"]
+[ext_resource type="Texture2D" uid="uid://eevb2qerixjk" path="res://assets/sprites/coffee.png" id="1_un6ks"]
+
+[sub_resource type="Curve" id="Curve_xles6"]
+_data = [Vector2(0, 1), 0.0, 0.895891, 0, 0, Vector2(1, 0), 0.32782, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_ir4mr"]
+offsets = PackedFloat32Array(0, 0.0739437, 0.471831, 0.890845, 1)
+colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0.392157, 1, 1, 1, 0, 1, 1, 1, 0)
+
+[node name="Coffee" type="Node2D"]
+script = ExtResource("1_nqo1y")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(2, 0)
+texture = ExtResource("1_un6ks")
+
+[node name="Line2D" type="Line2D" parent="."]
+points = PackedVector2Array(-8, -16, -8, -24, -8, -32, -8, -40, -8, -48)
+width = 12.0
+width_curve = SubResource("Curve_xles6")
+default_color = Color(0, 0, 0, 1)
+gradient = SubResource("Gradient_ir4mr")

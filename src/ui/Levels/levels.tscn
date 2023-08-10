@@ -1,0 +1,54 @@
+[gd_scene load_steps=4 format=3 uid="uid://l1gtykg40ywm"]
+
+[ext_resource type="Script" path="res://src/ui/Levels/levels.gd" id="1_pqrl6"]
+[ext_resource type="Texture2D" uid="uid://bv5a7ryjy258s" path="res://assets/sprites/dawnbackground.png" id="2_dgrly"]
+[ext_resource type="PackedScene" uid="uid://buedrwi81qonb" path="res://src/ui/Menu/menuBtn.tscn" id="3_qc2xe"]
+
+[node name="Levels" type="CanvasLayer"]
+script = ExtResource("1_pqrl6")
+
+[node name="ColorRect" type="TextureRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 0
+texture = ExtResource("2_dgrly")
+expand_mode = 5
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/margin_left = 256
+theme_override_constants/margin_right = 256
+
+[node name="Container" type="HFlowContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/h_separation = 48
+theme_override_constants/v_separation = 48
+alignment = 1
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -104.0
+offset_top = 16.0
+offset_right = -64.0
+offset_bottom = 56.0
+
+[node name="Back" parent="Control" instance=ExtResource("3_qc2xe")]
+z_index = 1
+layout_mode = 1
+offset_left = 1.76
+offset_right = 257.76
+text = "back
+"
+
+[connection signal="pressed" from="Control/Back" to="." method="_on_back_btn_pressed"]

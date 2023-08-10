@@ -1,10 +1,11 @@
-[gd_scene load_steps=34 format=3 uid="uid://cmj5bxlgfxs6k"]
+[gd_scene load_steps=43 format=3 uid="uid://cmj5bxlgfxs6k"]
 
 [ext_resource type="Script" path="res://src/game/Chic/chic.gd" id="1_3al1d"]
 [ext_resource type="Shader" path="res://src/shaders/outline.gdshader" id="1_4tnfx"]
 [ext_resource type="Texture2D" uid="uid://d24k46l6kqjn7" path="res://assets/sprites/chic.png" id="3_2siir"]
 [ext_resource type="Texture2D" uid="uid://ddvt2a1qqceex" path="res://assets/sprites/chic-shadow.png" id="4_xu0dq"]
 [ext_resource type="Texture2D" uid="uid://dkdmmuy2woo0e" path="res://assets/sprites/chic-wing.png" id="5_7vb0r"]
+[ext_resource type="Texture2D" uid="uid://tmcp551jihpg" path="res://assets/sprites/colorsign.png" id="6_hu45s"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7kaqq"]
 resource_local_to_scene = true
@@ -225,14 +226,69 @@ _data = {
 "walk": SubResource("Animation_rvor2")
 }
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_w6a4q"]
+atlas = ExtResource("6_hu45s")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w3rx7"]
+atlas = ExtResource("6_hu45s")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2bmej"]
+atlas = ExtResource("6_hu45s")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e6j0w"]
+atlas = ExtResource("6_hu45s")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8ahj8"]
+atlas = ExtResource("6_hu45s")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x0vfa"]
+atlas = ExtResource("6_hu45s")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_25mo6"]
+atlas = ExtResource("6_hu45s")
+region = Rect2(96, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_w506f"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w6a4q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w3rx7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2bmej")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e6j0w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8ahj8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x0vfa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_25mo6")
+}],
+"loop": false,
+"name": &"default",
+"speed": 0.0
+}]
+
 [node name="Chic" type="CharacterBody2D"]
 z_index = 1
 z_as_relative = false
 collision_layer = 2
 collision_mask = 0
 script = ExtResource("1_3al1d")
-color = null
-shadowed = null
 
 [node name="Shadow" type="Sprite2D" parent="."]
 texture_filter = 1
@@ -274,3 +330,11 @@ debug_color = Color(0, 0.6, 0.701961, 0.294118)
 libraries = {
 "": SubResource("AnimationLibrary_ddftd")
 }
+
+[node name="ColorSign" type="AnimatedSprite2D" parent="."]
+z_index = 1
+texture_filter = 1
+position = Vector2(8, -10)
+rotation = 0.174533
+scale = Vector2(0.75, 0.75)
+sprite_frames = SubResource("SpriteFrames_w506f")

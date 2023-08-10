@@ -39,6 +39,7 @@ func _ready():
 	for i in range(200):
 		var new_chic: Chic = chic_node.instantiate()
 		new_chic.color = randi_range(0, GameManager.Colors.size() - 1)
+		new_chic.demo = true
 		await get_tree().create_timer(.001).timeout
 		chics.add_child(new_chic)
 		new_chic.shadow.visible = false

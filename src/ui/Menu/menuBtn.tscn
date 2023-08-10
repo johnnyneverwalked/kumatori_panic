@@ -23,6 +23,7 @@ shadow_size = 1
 shadow_offset = Vector2(4, 4)
 
 [node name="Btn" type="Button"]
+z_index = 1
 texture_filter = 1
 anchors_preset = -1
 anchor_left = -0.044
@@ -50,7 +51,7 @@ alignment = 2
 script = ExtResource("3_ebv5x")
 
 [node name="ProgressBar" type="ProgressBar" parent="."]
-z_index = -1
+z_as_relative = false
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0

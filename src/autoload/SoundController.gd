@@ -45,9 +45,9 @@ func _set_volume(player: AudioStreamPlayer, percentage: float):
 	if not percentage:
 		player.volume_db = -80
 		return
-	if percentage < 1:
-		percentage *= 100
-	player.volume_db = 10 * log(percentage / 100) / log(10)
+	if percentage >= 1:
+		percentage /= 100.0
+	player.volume_db = linear_to_db(percentage)
 	emit_signal("volume_changed")
 
 func clean_players():

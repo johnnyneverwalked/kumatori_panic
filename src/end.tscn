@@ -1,0 +1,68 @@
+[gd_scene load_steps=6 format=3 uid="uid://cw85to1pyvspv"]
+
+[ext_resource type="Script" path="res://src/end.gd" id="1_dch3d"]
+[ext_resource type="Texture2D" uid="uid://b5eqj4yrv6m0g" path="res://assets/sprites/nightbackgroundwithmoon.png" id="1_k7qqj"]
+[ext_resource type="Theme" uid="uid://dd2gdeigo2urf" path="res://src/resources/main_theme.tres" id="2_6sbh0"]
+[ext_resource type="PackedScene" uid="uid://buedrwi81qonb" path="res://src/ui/Menu/menuBtn.tscn" id="3_074k1"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_xcjf7"]
+particle_flag_disable_z = true
+gravity = Vector3(0, 98, 0)
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+
+[node name="End" type="Node2D"]
+script = ExtResource("1_dch3d")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="ColorRect" type="TextureRect" parent="CanvasLayer"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 1440.0
+grow_horizontal = 2
+texture = ExtResource("1_k7qqj")
+expand_mode = 5
+stretch_mode = 6
+
+[node name="Label" type="Label" parent="CanvasLayer"]
+texture_filter = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -0.5
+offset_top = -11.5
+offset_right = 0.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_6sbh0")
+theme_override_colors/font_outline_color = Color(0.223529, 0.203922, 0.341176, 1)
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/font_size = 64
+text = "CONGRATULATIONS!
+All the chicks are back in the coop thanks to you!
+Thank you for playing"
+horizontal_alignment = 1
+
+[node name="Control" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -104.0
+offset_top = 16.0
+offset_right = -64.0
+offset_bottom = 56.0
+
+[node name="Back" parent="CanvasLayer/Control" instance=ExtResource("3_074k1")]
+layout_mode = 1
+offset_left = 1.76
+offset_right = 257.76
+text = "back
+"
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+process_material = SubResource("ParticleProcessMaterial_xcjf7")
+
+[connection signal="pressed" from="CanvasLayer/Control/Back" to="." method="_on_back_btn_pressed"]

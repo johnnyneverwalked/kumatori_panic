@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://cpjeiyn0pyu5x"]
+[gd_scene load_steps=5 format=3 uid="uid://cpjeiyn0pyu5x"]
 
 [ext_resource type="Script" path="res://src/ui/Pause/pause.gd" id="1_s36a6"]
 [ext_resource type="PackedScene" uid="uid://c13ku2nlnxwbi" path="res://src/ui/PauseOverlay/pause_overlay.tscn" id="2_8stmg"]
 [ext_resource type="Theme" uid="uid://dd2gdeigo2urf" path="res://src/resources/main_theme.tres" id="3_a2j3u"]
+[ext_resource type="PackedScene" uid="uid://p4en2v7tghbs" path="res://src/ui/Settings/Settings.tscn" id="4_gfpai"]
 
 [node name="Pause" type="CanvasLayer"]
 process_mode = 2
@@ -27,6 +28,7 @@ theme_override_constants/separation = 16
 
 [node name="Play" type="Button" parent="PauseOverlay/MenuContainer"]
 layout_mode = 2
+focus_neighbor_top = NodePath("../Exit")
 theme = ExtResource("3_a2j3u")
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 16
@@ -41,6 +43,14 @@ theme_override_constants/outline_size = 16
 theme_override_font_sizes/font_size = 64
 text = "Settings"
 
+[node name="Levels" type="Button" parent="PauseOverlay/MenuContainer"]
+layout_mode = 2
+theme = ExtResource("3_a2j3u")
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/font_size = 64
+text = "Level select"
+
 [node name="MainMenu" type="Button" parent="PauseOverlay/MenuContainer"]
 layout_mode = 2
 theme = ExtResource("3_a2j3u")
@@ -51,12 +61,19 @@ text = "main menu"
 
 [node name="Exit" type="Button" parent="PauseOverlay/MenuContainer"]
 layout_mode = 2
+focus_neighbor_bottom = NodePath("../Play")
 theme = ExtResource("3_a2j3u")
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 16
 theme_override_font_sizes/font_size = 64
 text = "quit"
 
+[node name="Settings" parent="." instance=ExtResource("4_gfpai")]
+process_mode = 2
+visible = false
+
 [connection signal="button_up" from="PauseOverlay/MenuContainer/Play" to="." method="_on_play_button_up"]
+[connection signal="button_up" from="PauseOverlay/MenuContainer/Settings" to="." method="_on_settings_button_up"]
+[connection signal="button_up" from="PauseOverlay/MenuContainer/Levels" to="." method="_on_levels_button_up"]
 [connection signal="button_up" from="PauseOverlay/MenuContainer/MainMenu" to="." method="_on_main_menu_button_up"]
 [connection signal="button_up" from="PauseOverlay/MenuContainer/Exit" to="." method="_on_exit_button_up"]

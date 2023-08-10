@@ -27,6 +27,7 @@ position = Vector2(-288, 114)
 position = Vector2(-264, 114)
 color = 2
 shadowed = null
+demo = true
 
 [node name="Chics" type="Node2D" parent="."]
 

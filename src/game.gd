@@ -1,5 +1,7 @@
 extends Node2D
 
+const LEVEL_PATH: String = "res://src/resources/levels/"
+
 @onready var grass: TileMap = $Grass
 @onready var bg: TextureRect = $Bg
 @onready var camera: Camera2D = GameManager.cam
@@ -20,31 +22,52 @@ var bear: Bear
 var bounds
 
 var locked: bool
+var level_won: bool
+var zen_mode_unlocked_now: bool
 var level_start_time: int
+
 var grid:= Vector2.ZERO
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	GameManager.can_pause = true
-	SoundController.play_music(GameManager.bgm.main2)
+	collected_lbl.text = collected_lbl.text.split(": ")[0] + ": " + str(GameManager.GAME_DATA.game_state.total_chics)
+	zen_mode = GameManager.GAME_DATA.game_state.zen_mode
+	SoundController.play_music(GameManager.bgm.zen if zen_mode else GameManager.bgm.main)
 	randomize()
 	
-	if GameManager.GAME_DATA.game_state.zen_mode_played or not zen_mode:
+	zen_dialog_btn.pressed.connect(func(): 
+		zen_dialog.hide()
 		zen_dialog.queue_free()
-	if zen_mode:
-		dialog.queue_free()
-		timer.visible = false
-		$Coop.modulate.a = 0
-		stage_lbl.visible = false
+		if not GameManager.GAME_DATA.game_state.zen_mode_played:
+			show_win_lose_dialog(true)
+	)
 
-		if is_instance_valid(zen_dialog) and false:
-			GameManager.GAME_DATA.game_state.zen_mode_played = true
+	if GameManager.GAME_DATA.game_state.zen_mode_played or not (GameManager.GAME_DATA.game_state.zen_mode_locked or zen_mode):
+		zen_dialog.queue_free()
+	else:
+		GameManager.GAME_DATA.zen_mode_unlocked.connect(func():
+			zen_mode_unlocked_now = true
 			zen_dialog.popup_centered()
 			zen_dialog_btn.grab_focus()
-			zen_dialog_btn.pressed.connect(func(): 
-				zen_dialog.hide()
-				zen_dialog.queue_free()
-			)
+			$ui/zen_dialog/MarginContainer/VBoxContainer/Label.text = "You have unlocked ZEN MODE,\na more relaxed, endless experience!\n You can access it from the main menu"
+		)
+		
+		
+	$Coffee.visible = zen_mode
+	stage_lbl.visible = not zen_mode
+	timer.visible = not zen_mode
+	if zen_mode:
+		dialog.queue_free()
+		$Coop.modulate.a = 0
+
+		if not GameManager.GAME_DATA.game_state.zen_mode_played:
+			GameManager.GAME_DATA.game_state = {zen_mode_played = true}
+			GameManager.GAME_DATA.save_state()
+			
+			zen_dialog.popup_centered()
+			zen_dialog_btn.grab_focus()
+			
 			await zen_dialog.visibility_changed
 
 	var tween = create_tween().set_loops()\
@@ -70,6 +93,18 @@ func _ready():
 	GameManager.game_over.connect(func(won):
 		timer.stop()
 		if (won):
+			var total_chics = 0
+			var unlocked_levels = GameManager.GAME_DATA.game_state.unlocked_levels
+			if GameManager.GAME_DATA.game_state.has("total_chics"):
+				total_chics = GameManager.GAME_DATA.game_state.total_chics
+			if GameManager.GAME_DATA.game_state.current_level == unlocked_levels:
+				unlocked_levels += 1
+				
+			GameManager.GAME_DATA.game_state = {
+				total_chics = total_chics + grid.x * grid.y - 1, 
+				unlocked_levels = unlocked_levels
+			}
+			GameManager.GAME_DATA.save_state()
 			gather_chics() 
 			return
 		
@@ -96,7 +131,10 @@ func generate_scripted_level():
 	GameManager.can_pause = false
 	locked = true
 	
-	var level: Image = load(GameManager.GAME_DATA.levels_folder_path + "test" + ".png").get_image()
+	var level_index: int = GameManager.GAME_DATA.game_state.current_level
+	stage_lbl.text = stage_lbl.text.split(": ")[0] + ": " + str(level_index + 1)
+	
+	var level: Image = load(GameManager.GAME_DATA.levels_folder_path + str(level_index) + ".png").get_image()
 	
 	grid = Vector2(level.get_size())
 	bounds = null
@@ -118,20 +156,18 @@ func generate_scripted_level():
 	
 	bear = GameManager.generate_level(self, grid, contents, grass, nest, bear)
 	handle_post_level_generation()
+	timer.start()
 
 
 func generate_random_level():
 	GameManager.can_pause = false
 	locked = true
 	
-#	grid = Vector2(
-#		randi_range(GameManager.GAME_DATA.settings.zen_mode.min_grid.x, GameManager.GAME_DATA.settings.zen_mode.max_grid.x),
-#		randi_range(GameManager.GAME_DATA.settings.zen_mode.min_grid.y, GameManager.GAME_DATA.settings.zen_mode.max_grid.y),
-#	)
-	grid = Vector2(max(3, grid.x + 1), max(3, grid.y + 1))
-	if grid == Vector2.ONE * 9:
-		_on_cancel_pressed()
-		return
+	grid = Vector2(
+		randi_range(GameManager.GAME_DATA.settings.zen_mode_min_grid.x, GameManager.GAME_DATA.settings.zen_mode_max_grid.x),
+		randi_range(GameManager.GAME_DATA.settings.zen_mode_min_grid.y, GameManager.GAME_DATA.settings.zen_mode_max_grid.y),
+	)
+
 	bounds = null
 	queue_redraw()
 	
@@ -171,6 +207,7 @@ func generate_random_level():
 	
 
 func handle_post_level_generation():
+	level_won = false
 	bear.place_chic.connect(place_chic)
 	bear.unlock.connect(func():
 		if GameManager.is_winning_board(grass, nest):
@@ -183,8 +220,8 @@ func handle_post_level_generation():
 	bear.locked = false
 	bear.disable_inputs = false
 	queue_redraw()
-	level_start_time = Time.get_ticks_msec()
 	GameManager.can_pause = true
+	level_start_time = Time.get_ticks_msec()
 
 
 func place_chic(chic: Chic):
@@ -193,7 +230,8 @@ func place_chic(chic: Chic):
 
 func gather_chics():
 	var total_level_time: float = (Time.get_ticks_msec() - level_start_time) / 1000.0
-	GameManager.GAME_DATA.save_level_time(grid, total_level_time)
+	if not zen_mode:
+		GameManager.GAME_DATA.save_level_time(GameManager.GAME_DATA.game_state.current_level, total_level_time)
 	var tween = create_tween().set_parallel(true)\
 		.set_ease(Tween.EASE_IN)\
 		.set_trans(Tween.TRANS_SINE)
@@ -220,10 +258,8 @@ func gather_chics():
 			.set_ease(Tween.EASE_OUT)
 	
 	tween.finished.connect(func(): 
-		if not GameManager.GAME_DATA.game_state.has("total_chics"):
-			GameManager.GAME_DATA.game_state.total_chics = 0
-		GameManager.GAME_DATA.game_state.total_chics += grid.x * grid.y - 1
 		collected_lbl.text = collected_lbl.text.split(": ")[0] + ": " + str(GameManager.GAME_DATA.game_state.total_chics)
+		
 		if zen_mode:
 			create_tween()\
 				.tween_property($Coop, "modulate:a", 0.0, .5)\
@@ -255,12 +291,13 @@ func leave_chics():
 	tween.finished.connect(func(): show_win_lose_dialog(false))
 
 func show_win_lose_dialog(won: bool):
-	if not is_instance_valid(dialog):
+	if not is_instance_valid(dialog) or zen_mode_unlocked_now:
+		zen_mode_unlocked_now = false
 		return
 	var label: Label = $ui/Dialog/MarginContainer/VBoxContainer/Label
 	var ok_btn: Button = $ui/Dialog/MarginContainer/VBoxContainer/HBoxContainer/ok
 	var cancel_btn: Button = $ui/Dialog/MarginContainer/VBoxContainer/HBoxContainer/cancel
-	
+	level_won = won
 	if not won:
 		label.text = "OH no, time's up! \n the chics have ran away!"
 		cancel_btn.text = "Exit level"
@@ -270,21 +307,20 @@ func show_win_lose_dialog(won: bool):
 		cancel_btn.text = "Next level"
 		cancel_btn.grab_focus()
 		
+		
 	dialog.popup_centered()
 
 func restart():
 	$ui/Dialog.hide()
 	
+	if not SoundController.bgmPlayer.playing:
+		SoundController.play_music(GameManager.bgm.zen if zen_mode else GameManager.bgm.main)
+	
 	if not zen_mode:
 		generate_scripted_level()
-		$EggTimer.start()
-		if not SoundController.bgmPlayer.playing:
-			SoundController.play_music(GameManager.bgm.main2)
 		return
 	
 	generate_random_level()
-	if not SoundController.bgmPlayer.playing:
-		SoundController.play_music(GameManager.bgm.main2)
 
 
 func _on_ok_pressed():
@@ -292,8 +328,20 @@ func _on_ok_pressed():
 
 
 func _on_cancel_pressed():
-	SoundController.bgmPlayer.stop()
-	get_tree().change_scene_to_packed(load("res://src/ui/Menu/menu.tscn"))
+	if not level_won:
+		SoundController.bgmPlayer.stop()
+		get_tree().change_scene_to_packed(load("res://src/ui/Levels/levels.tscn"))
+		return
+
+	GameManager.GAME_DATA.game_state = {
+		current_level = GameManager.GAME_DATA.game_state.current_level + 1
+	}
+	if GameManager.GAME_DATA.game_state.current_level >= GameManager.GAME_DATA.TOTAL_LEVELS:
+		get_tree().change_scene_to_packed(load("res://src/end.tscn"))
+		return
+
+
+	restart()
 
 
 func _on_export_pressed():
@@ -309,4 +357,4 @@ func _on_export_pressed():
 				if chic is Chic and chic.global_position == world_pos:
 					level.set_pixel(x, y, GameManager.chic_colors[chic.color])
 
-	level.save_png("res://src/resources/levels/" + str(grid.x) + "_" + str(grid.y) + ".png")
+	level.save_png("res://src/resources/levels/" + str(min(grid.x, grid.y)) + "_" + str(max(grid.x, grid.y)) + "_" + str(randi()) + ".png")

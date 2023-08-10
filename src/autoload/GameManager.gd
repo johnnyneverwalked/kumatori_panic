@@ -18,12 +18,12 @@ const sfx: Dictionary = {
 	chic_jump_looped = preload("res://assets/audio/sfx/Jump looped.ogg"),
 }
 const bgm: Dictionary = {
-	main = preload("res://assets/audio/bgm/level_jingle.ogg"),
-	main2 = preload("res://assets/audio/bgm/JDSherbert - Minigame Music Pack - Beach Vibes.ogg"),
+	main = preload("res://assets/audio/bgm/JDSherbert - Minigame Music Pack - Beach Vibes.ogg"),
+	zen = preload("res://assets/audio/bgm/the-call-of-the-night.ogg"),
 	menu = preload("res://assets/audio/bgm/JDSherbert - Nostalgia Music Pack - Saturday Morning Cartoons.ogg")
 }
 
-enum Colors {WHITE, YELLOW, RED, BLUE, PINK, GREEN }
+enum Colors {WHITE, YELLOW, RED, BLUE, PINK, GREEN}
 
 const chic_colors: Dictionary = {
 	Colors.BLUE: Color("#11adc1"),
@@ -50,12 +50,13 @@ const bear_node = preload("res://src/game/Bear/bear.tscn")
 
 var time_scale: float = 1: set = set_time_scale
 var cam: Camera2D
-var can_pause: bool = true
+var can_pause: bool
 
 
 func _ready():
-	SoundController.set_music_volume(1)
-	SoundController.set_sound_volume(1)
+	GAME_DATA.load_settings()
+	GAME_DATA.load_state()
+	
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	
 	var pause_node = load("res://src/ui/Pause/pause.tscn")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://ckgk82uemd4bg"]
+[gd_scene load_steps=8 format=3 uid="uid://ckgk82uemd4bg"]
 
 [ext_resource type="Script" path="res://src/game.gd" id="1_61h8o"]
 [ext_resource type="Texture2D" uid="uid://b2rvs821tidmp" path="res://assets/sprites/allbackgroundstars.png" id="2_5lga2"]
@@ -6,10 +6,10 @@
 [ext_resource type="PackedScene" uid="uid://btpqjq87w544g" path="res://src/game/Coop/coop.tscn" id="4_y3jmo"]
 [ext_resource type="PackedScene" uid="uid://px8uey4vnmw4" path="res://src/game/Grass/tile_map.tscn" id="4_yo0vf"]
 [ext_resource type="Theme" uid="uid://dd2gdeigo2urf" path="res://src/resources/main_theme.tres" id="5_45ks5"]
+[ext_resource type="PackedScene" uid="uid://b645vwclqkbd5" path="res://src/game/Coffee/coffee.tscn" id="6_pklpf"]
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_61h8o")
-zen_mode = true
 
 [node name="Bg" type="TextureRect" parent="."]
 z_index = -1
@@ -38,8 +38,14 @@ position = Vector2(184, -96)
 [node name="EggTimer" parent="." instance=ExtResource("4_8cmid")]
 z_index = 1
 position = Vector2(188, 96)
-time = 15
+time = 999
 autostart = false
+
+[node name="Coffee" parent="." instance=ExtResource("6_pklpf")]
+visible = false
+z_index = 1
+position = Vector2(188, 104)
+scale = Vector2(2, 2)
 
 [node name="ui" type="CanvasLayer" parent="."]
 layer = 0
@@ -204,14 +210,13 @@ theme = ExtResource("5_45ks5")
 theme_override_constants/separation = 16
 
 [node name="Stage" type="Label" parent="ui/MarginContainer/VBoxContainer"]
-visible = false
 texture_filter = 1
 layout_mode = 2
 theme = ExtResource("5_45ks5")
 theme_override_colors/font_outline_color = Color(0.223529, 0.203922, 0.341176, 1)
 theme_override_constants/outline_size = 8
 theme_override_font_sizes/font_size = 32
-text = "stage: 1"
+text = "stage: "
 autowrap_mode = 2
 
 [node name="Collected" type="Label" parent="ui/MarginContainer/VBoxContainer"]

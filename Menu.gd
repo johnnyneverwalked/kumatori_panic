@@ -10,6 +10,7 @@ extends Control
 @onready var back_btn_container: MarginContainer = $CanvasLayer/Back
 @onready var back_btn: Button = $CanvasLayer/Back/Control/BackBtn
 @onready var credits: VBoxContainer = $CanvasLayer/Credits
+@onready var settings: CanvasLayer = $Settings
 @onready var tutorial: Node2D = $Tutorial
 @onready var container: MarginContainer = $CanvasLayer/Container
 
@@ -30,7 +31,9 @@ func _ready():
 	bear.hand_R.position = Vector2(5, 2)
 	credits_tween = create_tween()
 	credits_tween.stop()
-	animate()
+	animate(GameManager.GAME_DATA.game_state.skip_intro)
+	
+	GameManager.GAME_DATA.game_state = {skip_intro = true}
 
 
 func animate(skip_logo: bool = false):
@@ -41,6 +44,7 @@ func animate(skip_logo: bool = false):
 	var start_tween: Tween
 	
 	if not skip_logo:
+		SoundController.bgmPlayer.stop()
 		logo.position = screen_coords / 2
 		logo.scale = Vector2.ZERO
 		
@@ -61,7 +65,8 @@ func animate(skip_logo: bool = false):
 		get_tree().create_timer(.25).timeout.connect(func(): SoundController.play_sound(GameManager.sfx.chic_jump))
 		await start_tween.finished
 		start_tween.kill()
-		
+	
+	if not SoundController.bgmPlayer.playing:
 		SoundController.play_music(GameManager.bgm.menu)
 	
 	start_tween = create_tween()
@@ -109,19 +114,18 @@ func _unhandled_input(event):
 		if not is_focused:
 			buttons[0].grab_focus()
 
-func show_credits():
-	pass
 
 func _on_quit_pressed():
 	GameManager.notification(NOTIFICATION_WM_CLOSE_REQUEST)
 
 
 func _on_play_pressed():
-	get_tree().change_scene_to_packed(load("res://src/game.tscn"))
+	get_tree().change_scene_to_packed(load("res://src/ui/Levels/levels.tscn"))
 
 
 func _on_zen_mode_pressed():
-	pass # Replace with function body.
+	GameManager.GAME_DATA.game_state = {zen_mode = true}
+	get_tree().change_scene_to_packed(load("res://src/game.tscn"))
 
 
 func _on_how_to_pressed():
@@ -139,26 +143,7 @@ func _on_how_to_pressed():
 
 
 func _on_settings_pressed():
-	var dialog = AcceptDialog.new()
-	dialog.theme = load("res://src/resources/main_theme.tres")
-	dialog.title = "Share progress data"
-	dialog.dialog_text = "
-		This will show the game's folder. 
-		There should be a file called 'data.sv' containing the sharable game data.
-		Please share this file with me :)
-	"
-	dialog.ok_button_text = "Show folder"
-	dialog.add_theme_font_size_override("title_font_size", 32)
-	
-	add_child(dialog)
-	dialog.popup_centered()
-	
-	dialog.confirmed.connect(func(): 
-		OS.shell_show_in_file_manager(ProjectSettings.globalize_path("user://"), true)
-		dialog.queue_free()
-	)
-	dialog.canceled.connect(dialog.queue_free)
-	
+	settings.visible = true
 
 
 func _on_credits_pressed():
@@ -173,7 +158,7 @@ func _on_credits_pressed():
 	credits_tween.kill()
 	credits_tween = create_tween().set_trans(Tween.TRANS_LINEAR)
 	
-	credits_tween.tween_property(credits, "position:y", -credits.size.y - screen_coords.y / 2, 20)
+	credits_tween.tween_property(credits, "position:y", -credits.size.y - screen_coords.y / 2, 30)
 	credits_tween.finished.connect(func(): 
 		if showing_credits:
 			_on_back_btn_pressed()
@@ -187,7 +172,14 @@ func _on_credits_pressed():
 
 func _on_back_btn_pressed():
 	
+	# Settings
+	if settings.has_method("_on_back_pressed"):
+		settings._on_back_pressed()
+	else:
+		settings.visible = false
+	
 	# Credits
+	
 	credits.visible = false
 	credits.process_mode = Node.PROCESS_MODE_DISABLED
 	showing_credits = false
@@ -200,7 +192,8 @@ func _on_back_btn_pressed():
 	
 	$Dots.visible = true
 	
-	#Menu
+	# Menu
+	
 	container.visible = true
 	logo.visible = true
 	bear.visible = true

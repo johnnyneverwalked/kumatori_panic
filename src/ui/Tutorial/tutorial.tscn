@@ -51,7 +51,7 @@ theme_override_colors/font_color = Color(0.968627, 0.894118, 0.462745, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 8
 theme_override_font_sizes/font_size = 32
-text = "MOVE: [wasd]"
+text = "MOVE: [wasd] | [L-STICK]"
 horizontal_alignment = 2
 
 [node name="Label2" type="Label" parent="CanvasLayer/Text/Controls"]
@@ -64,7 +64,7 @@ theme_override_colors/font_color = Color(0.968627, 0.894118, 0.462745, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 8
 theme_override_font_sizes/font_size = 32
-text = "Look around: [arrows]"
+text = "Look around: [arrows] | [R-stick]"
 horizontal_alignment = 2
 
 [node name="Label3" type="Label" parent="CanvasLayer/Text/Controls"]
@@ -77,7 +77,7 @@ theme_override_colors/font_color = Color(0.968627, 0.894118, 0.462745, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 8
 theme_override_font_sizes/font_size = 32
-text = "PICKUP / place down: [space]"
+text = "PICKUP: [space] | [A or R1]"
 horizontal_alignment = 2
 
 [node name="Label4" type="Label" parent="CanvasLayer/Text/Controls"]
@@ -90,7 +90,7 @@ theme_override_colors/font_color = Color(0.968627, 0.894118, 0.462745, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 8
 theme_override_font_sizes/font_size = 32
-text = "Swap while moving: [shift (hold)]"
+text = "Moving swap: (hold) [shift] | [L1]"
 horizontal_alignment = 2
 
 [node name="Grass" parent="." instance=ExtResource("1_u4n11")]

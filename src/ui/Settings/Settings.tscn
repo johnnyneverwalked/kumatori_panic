@@ -1,0 +1,282 @@
+[gd_scene load_steps=6 format=3 uid="uid://p4en2v7tghbs"]
+
+[ext_resource type="Script" path="res://src/ui/Settings/Settings.gd" id="1_g1y5b"]
+[ext_resource type="PackedScene" uid="uid://buedrwi81qonb" path="res://src/ui/Menu/menuBtn.tscn" id="1_w0luc"]
+[ext_resource type="Theme" uid="uid://dd2gdeigo2urf" path="res://src/resources/main_theme.tres" id="2_qjjd0"]
+[ext_resource type="PackedScene" uid="uid://cmj5bxlgfxs6k" path="res://src/game/Chic/chic.tscn" id="4_rbme2"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xel5v"]
+
+[node name="Settings" type="CanvasLayer"]
+layer = 2
+script = ExtResource("1_g1y5b")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="MarginContainer2" type="MarginContainer" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/margin_left = -96
+theme_override_constants/margin_top = 32
+
+[node name="Control" type="MarginContainer" parent="MarginContainer2"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="Back" parent="MarginContainer2/Control" instance=ExtResource("1_w0luc")]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+focus_neighbor_bottom = NodePath("../../../MarginContainer/VBoxContainer/music/music_slider")
+text = "back
+"
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 256
+theme_override_constants/margin_top = 128
+theme_override_constants/margin_right = 256
+theme_override_constants/margin_bottom = 32
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="music" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/music"]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_qjjd0")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0.96875, 0.898438, 0.5, 1)
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 48
+text = "music volume"
+
+[node name="music_slider" type="HSlider" parent="MarginContainer/VBoxContainer/music"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+focus_neighbor_top = NodePath("../../../../MarginContainer2/Control/Back")
+theme = ExtResource("2_qjjd0")
+step = 5.0
+value = 50.0
+
+[node name="sound" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/sound"]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_qjjd0")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0.96875, 0.898438, 0.5, 1)
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 48
+text = "sound volume"
+
+[node name="sound_slider" type="HSlider" parent="MarginContainer/VBoxContainer/sound"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme = ExtResource("2_qjjd0")
+step = 5.0
+value = 50.0
+
+[node name="screen_size" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/screen_size"]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_qjjd0")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0.96875, 0.898438, 0.5, 1)
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 48
+text = "Screen size"
+
+[node name="screen_options" type="OptionButton" parent="MarginContainer/VBoxContainer/screen_size"]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 2
+theme = ExtResource("2_qjjd0")
+item_count = 3
+selected = 0
+popup/item_0/text = "Windowed"
+popup/item_0/id = 0
+popup/item_1/text = "borderless"
+popup/item_1/id = 1
+popup/item_2/text = "full screen"
+popup/item_2/id = 2
+
+[node name="cb_mode" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/cb_mode"]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_qjjd0")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0.96875, 0.898438, 0.5, 1)
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 48
+text = "Colorblind mode"
+
+[node name="CheckButton" type="CheckButton" parent="MarginContainer/VBoxContainer/cb_mode"]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 0
+theme = ExtResource("2_qjjd0")
+vertical_icon_alignment = 0
+
+[node name="Node" type="Node2D" parent="MarginContainer/VBoxContainer/cb_mode"]
+
+[node name="Chic" parent="MarginContainer/VBoxContainer/cb_mode/Node" instance=ExtResource("4_rbme2")]
+position = Vector2(592, 33)
+scale = Vector2(2, 2)
+
+[node name="Chic2" parent="MarginContainer/VBoxContainer/cb_mode/Node" instance=ExtResource("4_rbme2")]
+position = Vector2(832, 33)
+scale = Vector2(2, 2)
+color = 5
+
+[node name="Chic3" parent="MarginContainer/VBoxContainer/cb_mode/Node" instance=ExtResource("4_rbme2")]
+position = Vector2(784, 33)
+scale = Vector2(2, 2)
+color = 4
+
+[node name="Chic4" parent="MarginContainer/VBoxContainer/cb_mode/Node" instance=ExtResource("4_rbme2")]
+position = Vector2(736, 33)
+scale = Vector2(2, 2)
+color = 3
+
+[node name="Chic5" parent="MarginContainer/VBoxContainer/cb_mode/Node" instance=ExtResource("4_rbme2")]
+position = Vector2(688, 33)
+scale = Vector2(2, 2)
+color = 2
+
+[node name="Chic6" parent="MarginContainer/VBoxContainer/cb_mode/Node" instance=ExtResource("4_rbme2")]
+position = Vector2(640, 33)
+scale = Vector2(2, 2)
+color = 1
+
+[node name="zen_mode" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/zen_mode"]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_qjjd0")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0.96875, 0.898438, 0.5, 1)
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 48
+text = "zen mode"
+
+[node name="min_size" type="HBoxContainer" parent="MarginContainer/VBoxContainer/zen_mode"]
+layout_mode = 2
+
+[node name="HSeparator" type="VSeparator" parent="MarginContainer/VBoxContainer/zen_mode/min_size"]
+layout_mode = 2
+theme_override_constants/separation = 8
+theme_override_styles/separator = SubResource("StyleBoxEmpty_xel5v")
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/zen_mode/min_size"]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_qjjd0")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0.96875, 0.898438, 0.5, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 32
+text = "- minimum level size"
+
+[node name="OptionButton" type="OptionButton" parent="MarginContainer/VBoxContainer/zen_mode/min_size"]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 2
+theme = ExtResource("2_qjjd0")
+item_count = 2
+selected = 0
+popup/item_0/text = "3x3"
+popup/item_0/id = 3
+popup/item_1/text = "4x4"
+popup/item_1/id = 4
+
+[node name="max_size" type="HBoxContainer" parent="MarginContainer/VBoxContainer/zen_mode"]
+layout_mode = 2
+
+[node name="HSeparator" type="VSeparator" parent="MarginContainer/VBoxContainer/zen_mode/max_size"]
+layout_mode = 2
+theme_override_constants/separation = 8
+theme_override_styles/separator = SubResource("StyleBoxEmpty_xel5v")
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/zen_mode/max_size"]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_qjjd0")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0.96875, 0.898438, 0.5, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 32
+text = "- maximum level size"
+
+[node name="OptionButton" type="OptionButton" parent="MarginContainer/VBoxContainer/zen_mode/max_size"]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 2
+theme = ExtResource("2_qjjd0")
+item_count = 2
+selected = 0
+popup/item_0/text = "3x3"
+popup/item_0/id = 3
+popup/item_1/text = "4x4"
+popup/item_1/id = 4
+
+[node name="reset" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 32
+
+[node name="btn" type="Button" parent="MarginContainer/VBoxContainer/reset"]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 0
+theme = ExtResource("2_qjjd0")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 0.490196)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 0.490196)
+theme_override_colors/font_outline_color = Color(0.968627, 0.898039, 0.501961, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 32
+text = "Reset data"
+
+[connection signal="pressed" from="MarginContainer2/Control/Back" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/reset/btn" to="." method="_on_reset_pressed"]

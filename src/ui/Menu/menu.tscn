@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://dwhofntsmm6y1"]
+[gd_scene load_steps=16 format=3 uid="uid://dwhofntsmm6y1"]
 
 [ext_resource type="Script" path="res://Menu.gd" id="1_msvty"]
 [ext_resource type="Shader" path="res://src/shaders/dots.gdshader" id="2_pjbtg"]
@@ -9,6 +9,7 @@
 [ext_resource type="Theme" uid="uid://dd2gdeigo2urf" path="res://src/resources/main_theme.tres" id="7_e6axl"]
 [ext_resource type="PackedScene" uid="uid://buedrwi81qonb" path="res://src/ui/Menu/menuBtn.tscn" id="7_q8y3s"]
 [ext_resource type="PackedScene" uid="uid://c1w20s3g2487t" path="res://src/ui/Tutorial/tutorial.tscn" id="7_um00g"]
+[ext_resource type="PackedScene" uid="uid://p4en2v7tghbs" path="res://src/ui/Settings/Settings.tscn" id="10_n6mrx"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7bqqk"]
 shader = ExtResource("2_pjbtg")
@@ -93,110 +94,127 @@ color = Color(0, 0, 0, 1)
 [node name="Chic" parent="Chics" instance=ExtResource("4_nkxen")]
 position = Vector2(288, 176)
 scale = Vector2(2, 2)
-color = 0
 shadowed = false
+demo = true
 
 [node name="Chic7" parent="Chics" instance=ExtResource("4_nkxen")]
 position = Vector2(424, 144)
 scale = Vector2(2, 2)
 color = 3
 shadowed = false
+demo = true
 
 [node name="Chic8" parent="Chics" instance=ExtResource("4_nkxen")]
 position = Vector2(360, 176)
 scale = Vector2(2, 2)
 color = 3
 shadowed = false
+demo = true
 
 [node name="Chic9" parent="Chics" instance=ExtResource("4_nkxen")]
 position = Vector2(392, 176)
 scale = Vector2(2, 2)
 color = 2
 shadowed = false
+demo = true
 
 [node name="Chic10" parent="Chics" instance=ExtResource("4_nkxen")]
 position = Vector2(424, 176)
 scale = Vector2(2, 2)
 color = 1
 shadowed = false
+demo = true
 
 [node name="Chic11" parent="Chics" instance=ExtResource("4_nkxen")]
 position = Vector2(360, 144)
 scale = Vector2(2, 2)
 color = 4
 shadowed = false
+demo = true
 
 [node name="Chic12" parent="Chics" instance=ExtResource("4_nkxen")]
 position = Vector2(392, 208)
 scale = Vector2(2, 2)
 color = 1
 shadowed = false
+demo = true
 
 [node name="Chic13" parent="Chics" instance=ExtResource("4_nkxen")]
 position = Vector2(424, 208)
 scale = Vector2(2, 2)
 color = 2
 shadowed = false
+demo = true
 
 [node name="Chic14" parent="Chics" instance=ExtResource("4_nkxen")]
 position = Vector2(360, 208)
 scale = Vector2(2, 2)
 color = 3
 shadowed = false
+demo = true
 
 [node name="Chic15" parent="Chics" instance=ExtResource("4_nkxen")]
 position = Vector2(328, 208)
 scale = Vector2(2, 2)
 color = 3
 shadowed = false
+demo = true
 
 [node name="Chic16" parent="Chics" instance=ExtResource("4_nkxen")]
 position = Vector2(392, 144)
 scale = Vector2(2, 2)
 color = 5
 shadowed = false
+demo = true
 
 [node name="Chic17" parent="Chics" instance=ExtResource("4_nkxen")]
 position = Vector2(424, 112)
 scale = Vector2(2, 2)
 color = 3
 shadowed = false
+demo = true
 
 [node name="Chic18" parent="Chics" instance=ExtResource("4_nkxen")]
 position = Vector2(456, 208)
 scale = Vector2(2, 2)
 color = 1
 shadowed = false
+demo = true
 
 [node name="Chic2" parent="Chics" instance=ExtResource("4_nkxen")]
 position = Vector2(328, 240)
 scale = Vector2(2, 2)
 color = 2
 shadowed = false
+demo = true
 
 [node name="Chic3" parent="Chics" instance=ExtResource("4_nkxen")]
 position = Vector2(360, 240)
 scale = Vector2(2, 2)
 color = 5
 shadowed = false
+demo = true
 
 [node name="Chic4" parent="Chics" instance=ExtResource("4_nkxen")]
 position = Vector2(392, 240)
 scale = Vector2(2, 2)
 color = 1
 shadowed = false
+demo = true
 
 [node name="Chic5" parent="Chics" instance=ExtResource("4_nkxen")]
 position = Vector2(424, 240)
 scale = Vector2(2, 2)
 color = 4
 shadowed = false
+demo = true
 
 [node name="Chic6" parent="Chics" instance=ExtResource("4_nkxen")]
 position = Vector2(456, 240)
 scale = Vector2(2, 2)
 color = 5
 shadowed = false
+demo = true
 
 [node name="Bear" parent="." instance=ExtResource("3_y4bdm")]
 position = Vector2(216, 208)
@@ -236,6 +254,7 @@ theme = ExtResource("7_e6axl")
 theme_override_colors/font_color = Color(0.968627, 0.894118, 0.462745, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 16
 text = "ver. 1.0.0"
 horizontal_alignment = 2
 
@@ -258,6 +277,7 @@ size_flags_vertical = 8
 
 [node name="Play" parent="CanvasLayer/Container/Controls" instance=ExtResource("7_q8y3s")]
 layout_mode = 2
+focus_neighbor_top = NodePath("../Quit")
 
 [node name="ZenMode" parent="CanvasLayer/Container/Controls" instance=ExtResource("7_q8y3s")]
 layout_mode = 2
@@ -269,7 +289,7 @@ text = "Tutorial"
 
 [node name="Settings" parent="CanvasLayer/Container/Controls" instance=ExtResource("7_q8y3s")]
 layout_mode = 2
-text = "Share data"
+text = "Settings"
 
 [node name="Credits" parent="CanvasLayer/Container/Controls" instance=ExtResource("7_q8y3s")]
 layout_mode = 2
@@ -278,6 +298,7 @@ text = "Credits
 
 [node name="Quit" parent="CanvasLayer/Container/Controls" instance=ExtResource("7_q8y3s")]
 layout_mode = 2
+focus_neighbor_bottom = NodePath("../Play")
 text = "Quit
 "
 
@@ -294,6 +315,7 @@ theme = ExtResource("7_e6axl")
 theme_override_colors/font_color = Color(0.968627, 0.894118, 0.462745, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 16
 text = "JohnnyNeverWalked"
 horizontal_alignment = 2
 
@@ -305,6 +327,7 @@ theme = ExtResource("7_e6axl")
 theme_override_colors/font_color = Color(0.968627, 0.894118, 0.462745, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 16
 text = "Eat sleep meep!"
 horizontal_alignment = 2
 
@@ -316,6 +339,7 @@ theme = ExtResource("7_e6axl")
 theme_override_colors/font_color = Color(0.968627, 0.894118, 0.462745, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 16
 text = "A game by its cover
 2023"
 horizontal_alignment = 2
@@ -460,6 +484,19 @@ theme_override_font_sizes/font_size = 48
 text = "JDSherbert"
 horizontal_alignment = 2
 
+[node name="Label2" type="Label" parent="CanvasLayer/Credits/VBoxContainer2"]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 1
+theme = ExtResource("7_e6axl")
+theme_override_colors/font_color = Color(0.968627, 0.894118, 0.462745, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 48
+text = "void1 gaming"
+horizontal_alignment = 2
+
 [node name="VBoxContainer3" type="VBoxContainer" parent="CanvasLayer/Credits"]
 layout_mode = 2
 theme_override_constants/separation = -8
@@ -600,6 +637,9 @@ offset_left = 0.0
 offset_right = 256.0
 disabled = true
 text = "back"
+
+[node name="Settings" parent="." instance=ExtResource("10_n6mrx")]
+visible = false
 
 [connection signal="return_to_menu" from="Tutorial" to="." method="_on_back_btn_pressed"]
 [connection signal="pressed" from="CanvasLayer/Container/Controls/Play" to="." method="_on_play_pressed"]
