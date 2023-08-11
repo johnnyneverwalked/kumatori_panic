@@ -146,13 +146,15 @@ func set_hands_position(pos: Vector2 = Vector2.ZERO):
 	if pos == hands_position or not HAND_POSITIONS.has(pos):
 		return
 	hands_position = pos
+	var world_pos: Vector2 = pos * GameManager.PIXEL_UNIT * 2
 	
 	#animate hand movement
 	var tween = create_tween().set_parallel(true)\
 		.set_trans(Tween.TRANS_BACK)\
 		.set_ease(Tween.EASE_OUT)
 	tween.tween_property(hands, "position", HAND_POSITIONS.get(pos).pos + body.position, PICKUP_SPEED)
-	tween.tween_property(indicator, "position", pos * GameManager.PIXEL_UNIT * 2, PICKUP_SPEED)
+	tween.tween_property(indicator, "position", world_pos, PICKUP_SPEED)
+	tween.tween_property(indicator, "modulate:a", 0 if is_out_of_bounds(to_global(world_pos)) else 1, PICKUP_SPEED)
 
 	# rotate paws to be oriented correctly
 	hand_L.rotation_degrees =  HAND_POSITIONS.get(pos).rot
@@ -164,7 +166,6 @@ func set_hands_position(pos: Vector2 = Vector2.ZERO):
 	holding.z_index = 1 if pos == Vector2.DOWN else 0
 	
 	# set chicken detector to the correct position
-#	pd.position = pos * GameManager.PIXEL_UNIT * 2
 	indicator.visible = pos != Vector2.ZERO and not demo
 #	lock(PICKUP_SPEED / 2)
 	
@@ -195,10 +196,11 @@ func move(dir: Vector2 = Vector2.ZERO, hold: bool = false):
 		else:
 			set_held_chic(target_chic)
 	
-	var tween = create_tween()\
+	var tween = create_tween().set_parallel()\
 		.set_trans(Tween.TRANS_BACK)\
 		.set_ease(Tween.EASE_OUT)
-	tween.tween_property(self, "global_position", global_position + dir * GameManager.PIXEL_UNIT * 2, PICKUP_SPEED)
+	tween.tween_property(self, "global_position", pos, PICKUP_SPEED)
+	tween.tween_property(indicator, "modulate:a", 0 if is_out_of_bounds(pos + indicator.position) else 1, PICKUP_SPEED)
 	
 #	hands_position = dir
 	

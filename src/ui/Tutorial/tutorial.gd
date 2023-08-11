@@ -90,7 +90,7 @@ var tutorial_steps: Array[Dictionary] = [
 	{delay = 1, method = "pickup", args = []},
 	{
 		delay = 1, 
-		text = "[center]The goal is to group all the same colored chics together.[/center]"
+		text = "[center]The goal is to group all the same colored chicks together.[/center]"
 	},
 	{
 		delay = 4, 

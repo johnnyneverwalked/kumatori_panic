@@ -24,7 +24,6 @@ var bounds
 var locked: bool
 var level_won: bool
 var zen_mode_unlocked_now: bool
-var level_start_time: int
 
 var grid:= Vector2.ZERO
 
@@ -223,7 +222,6 @@ func handle_post_level_generation():
 	bear.disable_inputs = false
 	queue_redraw()
 	GameManager.can_pause = true
-	level_start_time = Time.get_ticks_msec()
 
 
 func place_chic(chic: Chic):
@@ -231,9 +229,6 @@ func place_chic(chic: Chic):
 		nest.add_child(chic)
 
 func gather_chics():
-	var total_level_time: float = (Time.get_ticks_msec() - level_start_time) / 1000.0
-	if not zen_mode:
-		GameManager.GAME_DATA.save_level_time(GameManager.GAME_DATA.game_state.current_level, total_level_time)
 	var tween = create_tween().set_parallel(true)\
 		.set_ease(Tween.EASE_IN)\
 		.set_trans(Tween.TRANS_SINE)
@@ -301,11 +296,11 @@ func show_win_lose_dialog(won: bool):
 	var cancel_btn: Button = $ui/Dialog/MarginContainer/VBoxContainer/HBoxContainer/cancel
 	level_won = won
 	if not won:
-		label.text = "OH no, time's up! \n the chics have ran away!"
+		label.text = "OH no, time's up! \n the chicks have ran away!"
 		cancel_btn.text = "Exit level"
 		ok_btn.grab_focus()
 	else:
-		label.text = "HOORAY! \n the chics are back in the coop. \n how nice!"
+		label.text = "HOORAY! \n the chicks are back in the coop. \n how nice!"
 		cancel_btn.text = "Next level"
 		cancel_btn.grab_focus()
 		
