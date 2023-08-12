@@ -1,6 +1,6 @@
 [gd_scene load_steps=16 format=3 uid="uid://dwhofntsmm6y1"]
 
-[ext_resource type="Script" path="res://Menu.gd" id="1_msvty"]
+[ext_resource type="Script" path="res://src/ui/Menu/Menu.gd" id="1_nm7it"]
 [ext_resource type="Shader" path="res://src/shaders/dots.gdshader" id="2_pjbtg"]
 [ext_resource type="PackedScene" uid="uid://bnx4kbj5rc2jw" path="res://src/game/Bear/bear.tscn" id="3_y4bdm"]
 [ext_resource type="PackedScene" uid="uid://cmj5bxlgfxs6k" path="res://src/game/Chic/chic.tscn" id="4_nkxen"]
@@ -66,7 +66,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-script = ExtResource("1_msvty")
+script = ExtResource("1_nm7it")
 
 [node name="Bg" type="ColorRect" parent="."]
 layout_mode = 1

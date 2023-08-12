@@ -19,6 +19,7 @@ var credits_tween: Tween
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	SoundController.clean_players()
 	GameManager.can_pause = false
 	$Dots.visible = true
 	var zen_mode: Button = controls.get_node("ZenMode")

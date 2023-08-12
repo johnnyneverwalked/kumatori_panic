@@ -1,6 +1,7 @@
 # Godot 4+ specific ignores
 .godot/
 exports/
+*.tmp
 
 #general
 .DS_Store

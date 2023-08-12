@@ -13,7 +13,7 @@ func _ready():
 	$Logo.scale = Vector2.ZERO
 	$Title.visible = false
 	
-	await get_tree().create_timer(.5).timeout
+	await get_tree().create_timer(5).timeout
 	SoundController.play_sound(GameManager.sfx.block)
 	
 	var tween = create_tween()\

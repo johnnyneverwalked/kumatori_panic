@@ -116,9 +116,9 @@ func _ready():
 	else:
 		generate_scripted_level()
 
-func _unhandled_input(event):
-	if not locked and event.is_action_pressed("debug"):
-		generate_random_level()
+#func _unhandled_input(event):
+#	if not locked and event.is_action_pressed("debug"):
+#		generate_random_level()
 
 func _draw():
 	if bounds != null:
